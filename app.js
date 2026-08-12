@@ -350,8 +350,7 @@
       method: method,
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28"
+        Accept: "application/vnd.github+json"
       }
     };
     if (body) {
@@ -359,14 +358,27 @@
       opts.body = JSON.stringify(body);
     }
     var url = CONTENTS_URL + (method === "GET" ? "?ref=" + REPO_BRANCH : "");
-    return fetch(url, opts).then(function (res) {
-      if (!res.ok) {
-        var err = new Error("GitHub API-fejl (" + res.status + ")");
-        err.status = res.status;
+    return fetch(url, opts)
+      .catch(function () {
+        var err = new Error("Kunne ikke forbinde til GitHub (netværk eller CORS blokerede anmodningen).");
+        err.network = true;
         throw err;
-      }
-      return res.json();
-    });
+      })
+      .then(function (res) {
+        if (!res.ok) {
+          return res
+            .json()
+            .catch(function () {
+              return {};
+            })
+            .then(function (body) {
+              var err = new Error("GitHub API-fejl (" + res.status + "): " + (body.message || res.statusText));
+              err.status = res.status;
+              throw err;
+            });
+        }
+        return res.json();
+      });
   }
 
   function githubGetFile(token) {
@@ -469,16 +481,25 @@
       var token = input.value.trim();
       if (!token) return;
       submitBtn.disabled = true;
+      submitBtn.textContent = "Tjekker …";
+      error.hidden = true;
       githubGetFile(token)
         .then(function () {
           setStoredToken(token);
           submitBtn.disabled = false;
+          submitBtn.textContent = "Lås op";
           cleanup();
           onDone(true);
         })
-        .catch(function () {
+        .catch(function (err) {
+          console.error("Kunne ikke låse op:", err);
           submitBtn.disabled = false;
-          error.textContent = "Forkert adgangskode, eller ingen forbindelse.";
+          submitBtn.textContent = "Lås op";
+          error.textContent = err && err.status === 404
+            ? "Koden virker, men kan ikke finde data.json — tjek at token har adgang til italytrip."
+            : err && (err.status === 401 || err.status === 403)
+            ? "Forkert adgangskode."
+            : (err && err.message) || "Ukendt fejl — prøv igen.";
           error.hidden = false;
         });
     }
