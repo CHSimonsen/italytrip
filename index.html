@@ -434,6 +434,152 @@
     .countdown{ grid-template-columns:repeat(4,1fr); gap:6px; }
     .essentials .item{ min-width:130px; }
   }
+
+  /* ---------- Editing ---------- */
+  .edit-toggle{
+    margin-top:14px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--ink-soft);
+    background:var(--surface);
+    border:1px solid var(--line-strong);
+    border-radius:999px;
+    padding:7px 14px;
+    cursor:pointer;
+  }
+  .edit-toggle.is-unlocked{
+    color:var(--olive-deep);
+    border-color:color-mix(in srgb, var(--olive) 40%, transparent);
+    background:color-mix(in srgb, var(--olive) 12%, transparent);
+  }
+
+  .activity-delete{
+    flex:0 0 auto;
+    align-self:flex-start;
+    margin-left:auto;
+    width:26px; height:26px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--terracotta-deep);
+    cursor:pointer;
+  }
+  .activity-delete .icon{ width:14px; height:14px; }
+  .activity-delete:hover{ background:color-mix(in srgb, var(--terracotta) 14%, transparent); }
+
+  .day-body-actions{ padding-top:10px; }
+  .add-step-btn{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--sea-deep);
+    background:color-mix(in srgb, var(--sea) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--sea) 30%, transparent);
+    border-radius:999px;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .add-step-form{
+    margin-bottom:14px;
+    padding:14px;
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    border-radius:10px;
+    display:grid;
+    gap:10px;
+  }
+  .add-step-form .field{ display:grid; gap:4px; }
+  .add-step-form label{
+    font-family:var(--mono);
+    font-size:.64rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .add-step-form input, .add-step-form select{
+    font:inherit;
+    font-size:.9rem;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid var(--line-strong);
+    background:var(--surface);
+    color:var(--ink);
+  }
+  .add-step-form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+  }
+  .btn-primary, .btn-secondary{
+    font-family:var(--sans);
+    font-size:.85rem;
+    font-weight:600;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{ background:var(--terracotta); color:#fff; }
+  .btn-secondary{ background:transparent; border-color:var(--line-strong); color:var(--ink-soft); }
+
+  .modal-backdrop{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.45);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    z-index:100;
+  }
+  .modal{
+    width:100%; max-width:360px;
+    background:var(--surface);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px;
+  }
+  .modal h3{ font-size:1.15rem; margin-bottom:8px; }
+  .modal p{ color:var(--ink-soft); font-size:.88rem; margin-bottom:14px; }
+  .modal input{
+    width:100%;
+    font:inherit; font-size:.95rem;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid var(--line-strong);
+    background:var(--bg);
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .modal-error{ color:var(--terracotta-deep); font-size:.8rem; margin-bottom:8px; }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
+
+  .toast{
+    position:fixed;
+    left:50%; bottom:24px;
+    transform:translate(-50%,12px);
+    background:var(--ink);
+    color:var(--surface);
+    font-size:.85rem;
+    padding:10px 18px;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    opacity:0;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:200;
+    max-width:calc(100% - 40px);
+    text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  body.is-saving{ cursor:progress; }
+  body.is-saving .edit-toggle{ opacity:.6; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -493,6 +639,12 @@
     </symbol>
     <symbol id="icon-chevron" viewBox="0 0 24 24">
       <path d="M6 9l6 6 6-6"/>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path d="M4.5 7h15"/>
+      <path d="M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"/>
+      <path d="M6.5 7l1 13h9l1-13"/>
+      <path d="M10 11v6M14 11v6"/>
     </symbol>
   </defs>
 </svg>
@@ -586,7 +738,8 @@
       <div class="section-head">
         <span class="eyebrow">Itineraret</span>
         <h2>Dag for dag</h2>
-        <p>Tryk på en dag for at folde den ud. Klokkeslæt er et forslag til rækkefølge og tempo — ret dem til i <code>data.json</code>, når I kender de rigtige tider.</p>
+        <p>Tryk på en dag for at folde den ud. Klokkeslæt er et forslag til rækkefølge og tempo — ret dem til med <b>Rediger planen</b> nedenfor, eller direkte i <code>data.json</code> på GitHub.</p>
+        <button type="button" id="edit-toggle" class="edit-toggle" aria-pressed="false">🔒 Rediger planen</button>
       </div>
 
       <div id="timeline">
@@ -616,6 +769,20 @@
     </div>
   </footer>
 </main>
+
+<div id="auth-modal" class="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <h3 id="auth-modal-title">Lås redigering op</h3>
+    <p>Indtast adgangskoden for at kunne tilføje eller slette punkter i planen på denne enhed.</p>
+    <input type="password" id="auth-input" autocomplete="off" placeholder="Adgangskode">
+    <p id="auth-error" class="modal-error" hidden></p>
+    <div class="modal-actions">
+      <button type="button" id="auth-cancel" class="btn-secondary">Annuller</button>
+      <button type="button" id="auth-submit" class="btn-primary">Lås op</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
 
 <script src="app.js"></script>
 </body>

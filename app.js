@@ -13,6 +13,17 @@
     plane: "icon-plane",
     sun: "icon-sun"
   };
+  var ICON_KEYS = Object.keys(ICONS);
+
+  var REPO_OWNER = "CHSimonsen";
+  var REPO_NAME = "italytrip";
+  var REPO_BRANCH = "main";
+  var DATA_PATH = "data.json";
+  var TOKEN_KEY = "rejseplanEditToken";
+  var CONTENTS_URL =
+    "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + DATA_PATH;
+
+  var APP_DATA = null;
 
   function pad(n) {
     return String(n).padStart(2, "0");
@@ -47,6 +58,7 @@
     });
 
   function init(data) {
+    APP_DATA = data;
     renderTicket(data.trip.departure);
     renderRoute(data.route);
     renderTimeline(data.days);
@@ -54,6 +66,7 @@
     startCountdown(data.trip.departure.iso);
     markToday(data.days);
     wireMapMarkers();
+    initEditing();
   }
 
   /* ---------- Ticket / hero ---------- */
@@ -78,10 +91,19 @@
   }
 
   /* ---------- Timeline ---------- */
-  function renderActivity(act) {
+  function renderActivity(act, dayId, index) {
     var toneClass = act.tone ? " tone-" + act.tone : "";
     var badge = act.highlight
       ? '<span class="highlight-badge">' + iconUse("sun") + esc(act.highlight) + "</span>"
+      : "";
+    var deleteBtn = isEditMode()
+      ? '<button type="button" class="activity-delete" data-day="' +
+        esc(dayId) +
+        '" data-index="' +
+        index +
+        '" aria-label="Slet dette punkt">' +
+        '<svg class="icon"><use href="#icon-trash"></use></svg>' +
+        "</button>"
       : "";
     return (
       '<div class="activity' +
@@ -99,8 +121,14 @@
       "</p>" +
       badge +
       "</span>" +
+      deleteBtn +
       "</div>"
     );
+  }
+
+  function renderAddStepButton(dayId) {
+    if (!isEditMode()) return "";
+    return '<button type="button" class="add-step-btn" data-day="' + esc(dayId) + '">+ Tilføj punkt</button>';
   }
 
   function renderDay(day, isFirst) {
@@ -123,7 +151,11 @@
       })
       .join("");
 
-    var activitiesHtml = (day.activities || []).map(renderActivity).join("");
+    var activitiesHtml = (day.activities || [])
+      .map(function (a, i) {
+        return renderActivity(a, day.id, i);
+      })
+      .join("");
 
     var el = document.createElement("details");
     el.className = "day";
@@ -151,7 +183,16 @@
       "</summary>" +
       '<div class="day-body">' +
       (mapLinksHtml ? '<div class="map-links">' + mapLinksHtml + "</div>" : "") +
+      '<div class="activity-list" data-day="' +
+      esc(day.id) +
+      '">' +
       activitiesHtml +
+      "</div>" +
+      '<div class="day-body-actions" data-day="' +
+      esc(day.id) +
+      '">' +
+      renderAddStepButton(day.id) +
+      "</div>" +
       "</div>";
     return el;
   }
@@ -159,9 +200,15 @@
   function renderTimeline(days) {
     var container = document.getElementById("timeline");
     if (!container) return;
+    var openIds = [];
+    container.querySelectorAll(".day[open]").forEach(function (d) {
+      openIds.push(d.id);
+    });
     container.innerHTML = "";
     days.forEach(function (day, i) {
-      container.appendChild(renderDay(day, i === 0));
+      var el = renderDay(day, i === 0);
+      if (openIds.indexOf(day.id) !== -1) el.open = true;
+      container.appendChild(el);
     });
   }
 
@@ -250,6 +297,315 @@
           go();
         }
       });
+    });
+  }
+
+  /* ==========================================================
+     Editing: password-gated direct save to GitHub.
+
+     The "password" is a GitHub fine-grained Personal Access Token
+     scoped to ONLY this repo, Contents: Read and write. It's stored
+     in this browser's localStorage after the first successful entry
+     and sent straight to GitHub's API — never to any other server.
+     Anyone without it can still view the page normally; they just
+     don't see the add/delete controls.
+     ========================================================== */
+
+  function getStoredToken() {
+    try {
+      return localStorage.getItem(TOKEN_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+  function setStoredToken(t) {
+    try {
+      localStorage.setItem(TOKEN_KEY, t);
+    } catch (e) {}
+  }
+  function clearStoredToken() {
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+    } catch (e) {}
+  }
+  function isEditMode() {
+    return !!getStoredToken();
+  }
+
+  function b64EncodeUnicode(str) {
+    var bytes = new TextEncoder().encode(str);
+    var binary = "";
+    for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary);
+  }
+  function b64DecodeUnicode(b64) {
+    var binary = atob(b64.replace(/\n/g, ""));
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function githubRequest(token, method, body) {
+    var opts = {
+      method: method,
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+      }
+    };
+    if (body) {
+      opts.headers["Content-Type"] = "application/json";
+      opts.body = JSON.stringify(body);
+    }
+    var url = CONTENTS_URL + (method === "GET" ? "?ref=" + REPO_BRANCH : "");
+    return fetch(url, opts).then(function (res) {
+      if (!res.ok) {
+        var err = new Error("GitHub API-fejl (" + res.status + ")");
+        err.status = res.status;
+        throw err;
+      }
+      return res.json();
+    });
+  }
+
+  function githubGetFile(token) {
+    return githubRequest(token, "GET").then(function (json) {
+      return { sha: json.sha, data: JSON.parse(b64DecodeUnicode(json.content)) };
+    });
+  }
+
+  function githubPutFile(token, dataObj, sha, message) {
+    var content = b64EncodeUnicode(JSON.stringify(dataObj, null, 2) + "\n");
+    return githubRequest(token, "PUT", {
+      message: message,
+      content: content,
+      sha: sha,
+      branch: REPO_BRANCH
+    });
+  }
+
+  function setBusy(busy) {
+    document.body.classList.toggle("is-saving", busy);
+  }
+
+  function showToast(msg) {
+    var el = document.getElementById("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    requestAnimationFrame(function () {
+      el.classList.add("show");
+    });
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () {
+      el.classList.remove("show");
+      setTimeout(function () {
+        el.hidden = true;
+      }, 200);
+    }, 2600);
+  }
+
+  function withEdit(mutatorFn, commitMessage) {
+    var token = getStoredToken();
+    if (!token) return;
+    setBusy(true);
+    githubGetFile(token)
+      .then(function (current) {
+        var updated = mutatorFn(current.data);
+        return githubPutFile(token, updated, current.sha, commitMessage).then(function () {
+          return updated;
+        });
+      })
+      .then(function (updated) {
+        APP_DATA = updated;
+        renderTimeline(updated.days);
+        markToday(updated.days);
+        showToast("Gemt ✓");
+      })
+      .catch(function (err) {
+        if (err && (err.status === 401 || err.status === 403)) {
+          clearStoredToken();
+          updateEditToggle();
+          renderTimeline(APP_DATA.days);
+          markToday(APP_DATA.days);
+          showToast("Adgangskoden virker ikke længere.");
+        } else if (err && err.status === 409) {
+          showToast("Planen blev lige ændret et andet sted — prøv igen.");
+        } else {
+          showToast("Kunne ikke gemme: " + (err && err.message ? err.message : "ukendt fejl"));
+        }
+      })
+      .finally(function () {
+        setBusy(false);
+      });
+  }
+
+  /* ---------- Auth modal ---------- */
+  function openAuthModal(onDone) {
+    var backdrop = document.getElementById("auth-modal");
+    var input = document.getElementById("auth-input");
+    var error = document.getElementById("auth-error");
+    var submitBtn = document.getElementById("auth-submit");
+    var cancelBtn = document.getElementById("auth-cancel");
+    if (!backdrop || !input || !submitBtn || !cancelBtn) return;
+
+    error.hidden = true;
+    input.value = "";
+    backdrop.hidden = false;
+    input.focus();
+
+    function cleanup() {
+      backdrop.hidden = true;
+      submitBtn.removeEventListener("click", onSubmit);
+      cancelBtn.removeEventListener("click", onCancel);
+      input.removeEventListener("keydown", onKeydown);
+    }
+    function onCancel() {
+      cleanup();
+      onDone(false);
+    }
+    function onSubmit() {
+      var token = input.value.trim();
+      if (!token) return;
+      submitBtn.disabled = true;
+      githubGetFile(token)
+        .then(function () {
+          setStoredToken(token);
+          submitBtn.disabled = false;
+          cleanup();
+          onDone(true);
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          error.textContent = "Forkert adgangskode, eller ingen forbindelse.";
+          error.hidden = false;
+        });
+    }
+    function onKeydown(e) {
+      if (e.key === "Enter") onSubmit();
+      if (e.key === "Escape") onCancel();
+    }
+    submitBtn.addEventListener("click", onSubmit);
+    cancelBtn.addEventListener("click", onCancel);
+    input.addEventListener("keydown", onKeydown);
+  }
+
+  function updateEditToggle() {
+    var btn = document.getElementById("edit-toggle");
+    if (!btn) return;
+    var unlocked = isEditMode();
+    btn.textContent = unlocked ? "🔓 Redigering slået til" : "🔒 Rediger planen";
+    btn.setAttribute("aria-pressed", unlocked ? "true" : "false");
+    btn.classList.toggle("is-unlocked", unlocked);
+  }
+
+  function showAddForm(dayId) {
+    var actions = document.querySelector('.day-body-actions[data-day="' + cssEscape(dayId) + '"]');
+    if (!actions || actions.querySelector(".add-step-form")) return;
+
+    var form = document.createElement("div");
+    form.className = "add-step-form";
+    form.innerHTML =
+      '<div class="field"><label>Tidspunkt</label><input type="text" class="f-time" placeholder="f.eks. 12:00–13:00"></div>' +
+      '<div class="field"><label>Ikon</label><select class="f-icon">' +
+      ICON_KEYS.map(function (k) {
+        return '<option value="' + k + '">' + k + "</option>";
+      }).join("") +
+      "</select></div>" +
+      '<div class="field"><label>Beskrivelse</label><input type="text" class="f-text" placeholder="Hvad sker der?"></div>' +
+      '<div class="field"><label>Farvetone (valgfri)</label><select class="f-tone"><option value="">Standard</option><option value="sea">Hav (blå)</option><option value="olive">Oliven (grøn)</option></select></div>' +
+      '<div class="field"><label>Highlight-badge (valgfri)</label><input type="text" class="f-highlight" placeholder="f.eks. Pool-dag"></div>' +
+      '<div class="add-step-form-actions">' +
+      '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
+      '<button type="button" class="btn-primary f-save">Tilføj</button>' +
+      "</div>";
+    actions.insertBefore(form, actions.firstChild);
+    form.querySelector(".f-time").focus();
+
+    form.querySelector(".f-cancel").addEventListener("click", function () {
+      form.remove();
+    });
+    form.querySelector(".f-save").addEventListener("click", function () {
+      var time = form.querySelector(".f-time").value.trim();
+      var icon = form.querySelector(".f-icon").value;
+      var text = form.querySelector(".f-text").value.trim();
+      var tone = form.querySelector(".f-tone").value;
+      var highlight = form.querySelector(".f-highlight").value.trim();
+      if (!time || !text) {
+        showToast("Udfyld mindst tidspunkt og beskrivelse.");
+        return;
+      }
+      var activity = { time: time, icon: icon, text: text };
+      if (tone) activity.tone = tone;
+      if (highlight) activity.highlight = highlight;
+      form.remove();
+      withEdit(function (data) {
+        var day = data.days.filter(function (d) {
+          return d.id === dayId;
+        })[0];
+        if (day) {
+          day.activities = day.activities || [];
+          day.activities.push(activity);
+        }
+        return data;
+      }, "Tilføj punkt til " + dayId + " (via siden)");
+    });
+  }
+
+  function cssEscape(s) {
+    return String(s).replace(/["\\]/g, "\\$&");
+  }
+
+  function initEditing() {
+    updateEditToggle();
+
+    var toggle = document.getElementById("edit-toggle");
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        if (isEditMode()) {
+          if (confirm("Lås redigering af planen igen på denne enhed?")) {
+            clearStoredToken();
+            updateEditToggle();
+            renderTimeline(APP_DATA.days);
+            markToday(APP_DATA.days);
+          }
+        } else {
+          openAuthModal(function (ok) {
+            updateEditToggle();
+            if (ok) {
+              renderTimeline(APP_DATA.days);
+              markToday(APP_DATA.days);
+              showToast("Redigering slået til på denne enhed.");
+            }
+          });
+        }
+      });
+    }
+
+    var timeline = document.getElementById("timeline");
+    if (!timeline) return;
+
+    timeline.addEventListener("click", function (e) {
+      var delBtn = e.target.closest(".activity-delete");
+      if (delBtn) {
+        var dayId = delBtn.getAttribute("data-day");
+        var index = parseInt(delBtn.getAttribute("data-index"), 10);
+        if (!confirm("Slet dette punkt?")) return;
+        withEdit(function (data) {
+          var day = data.days.filter(function (d) {
+            return d.id === dayId;
+          })[0];
+          if (day && day.activities) day.activities.splice(index, 1);
+          return data;
+        }, "Slet punkt fra " + dayId + " (via siden)");
+        return;
+      }
+
+      var addBtn = e.target.closest(".add-step-btn");
+      if (addBtn) {
+        showAddForm(addBtn.getAttribute("data-day"));
+      }
     });
   }
 })();
