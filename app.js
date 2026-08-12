@@ -1,17 +1,46 @@
 (function () {
   "use strict";
 
-  /* Temporary debug net: surfaces any script/network error as a native
-     alert so it's visible on a phone with no devtools access. Remove
-     once the unlock issue is confirmed fixed. */
-  alert("app.js indlæst (build diag5)");
+  /* Temporary debug net: logs to a visible on-page panel instead of
+     alert() — Safari silently suppresses repeated alert() dialogs on
+     a page with no way to tell the script that happened, which made
+     alert()-based debugging itself go silent. A DOM panel can't be
+     suppressed. Remove this whole block once the unlock issue is
+     confirmed fixed. */
+  var dbgPanel = null;
+  function dbg(msg) {
+    if (!dbgPanel) {
+      dbgPanel = document.createElement("div");
+      dbgPanel.id = "debug-panel";
+      dbgPanel.style.cssText =
+        "position:fixed;bottom:0;left:0;right:0;max-height:45vh;overflow-y:auto;" +
+        "background:#000;color:#3f3;font:11px/1.4 monospace;padding:8px;z-index:99999;" +
+        "white-space:pre-wrap;word-break:break-word;border-top:2px solid #3f3;";
+      (document.body || document.documentElement).appendChild(dbgPanel);
+    }
+    var line = document.createElement("div");
+    var t = new Date();
+    var stamp = String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0") + ":" + String(t.getSeconds()).padStart(2, "0");
+    line.textContent = stamp + " " + msg;
+    dbgPanel.appendChild(line);
+    dbgPanel.scrollTop = dbgPanel.scrollHeight;
+  }
+  dbg("app.js indlæst (build diag6)");
   window.addEventListener("error", function (e) {
-    alert("Script-fejl: " + (e.message || "ukendt") + (e.filename ? "\n" + e.filename + ":" + e.lineno : ""));
+    dbg("SCRIPT-FEJL: " + (e.message || "ukendt") + (e.filename ? " @ " + e.filename + ":" + e.lineno : ""));
   });
   window.addEventListener("unhandledrejection", function (e) {
     var reason = e.reason;
-    alert("Uventet fejl (promise): " + (reason && reason.message ? reason.message : String(reason)));
+    dbg("UVENTET FEJL (promise): " + (reason && reason.message ? reason.message : String(reason)));
   });
+  document.addEventListener(
+    "click",
+    function (e) {
+      var el = e.target.closest("button, a, input");
+      if (el) dbg("Klik på: " + el.tagName + (el.id ? "#" + el.id : "") + (el.className ? "." + String(el.className).replace(/\s+/g, ".") : ""));
+    },
+    true
+  );
 
   var ICONS = {
     ferry: "icon-ferry",
@@ -492,13 +521,14 @@
     function onSubmit() {
       try {
         var token = input.value.trim();
-        alert("Klik registreret. Token-længde: " + token.length);
+        dbg("onSubmit kørt. Token-længde: " + token.length);
         if (!token) return;
         submitBtn.disabled = true;
         submitBtn.textContent = "Tjekker …";
         error.hidden = true;
         githubGetFile(token)
           .then(function () {
+            dbg("Login OK.");
             setStoredToken(token);
             submitBtn.disabled = false;
             submitBtn.textContent = "Lås op";
@@ -517,10 +547,10 @@
                 : (err && err.message) || "Ukendt fejl — prøv igen.";
             error.textContent = msg;
             error.hidden = false;
-            alert("Fejl ved forespørgsel: " + msg);
+            dbg("FEJL ved forespørgsel: " + msg + (err && err.status ? " (status " + err.status + ")" : "") + (err && err.network ? " [netværk/CORS]" : ""));
           });
       } catch (syncErr) {
-        alert("Uventet script-fejl i onSubmit: " + (syncErr && syncErr.message ? syncErr.message : syncErr));
+        dbg("UVENTET SCRIPT-FEJL i onSubmit: " + (syncErr && syncErr.message ? syncErr.message : syncErr));
       }
     }
     function onKeydown(e) {
