@@ -4,6 +4,7 @@
   /* Temporary debug net: surfaces any script/network error as a native
      alert so it's visible on a phone with no devtools access. Remove
      once the unlock issue is confirmed fixed. */
+  alert("app.js indlæst (build diag5)");
   window.addEventListener("error", function (e) {
     alert("Script-fejl: " + (e.message || "ukendt") + (e.filename ? "\n" + e.filename + ":" + e.lineno : ""));
   });
