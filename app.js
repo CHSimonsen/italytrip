@@ -1,6 +1,17 @@
 (function () {
   "use strict";
 
+  /* Temporary debug net: surfaces any script/network error as a native
+     alert so it's visible on a phone with no devtools access. Remove
+     once the unlock issue is confirmed fixed. */
+  window.addEventListener("error", function (e) {
+    alert("Script-fejl: " + (e.message || "ukendt") + (e.filename ? "\n" + e.filename + ":" + e.lineno : ""));
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    var reason = e.reason;
+    alert("Uventet fejl (promise): " + (reason && reason.message ? reason.message : String(reason)));
+  });
+
   var ICONS = {
     ferry: "icon-ferry",
     transit: "icon-transit",
@@ -478,30 +489,38 @@
       onDone(false);
     }
     function onSubmit() {
-      var token = input.value.trim();
-      if (!token) return;
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Tjekker …";
-      error.hidden = true;
-      githubGetFile(token)
-        .then(function () {
-          setStoredToken(token);
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Lås op";
-          cleanup();
-          onDone(true);
-        })
-        .catch(function (err) {
-          console.error("Kunne ikke låse op:", err);
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Lås op";
-          error.textContent = err && err.status === 404
-            ? "Koden virker, men kan ikke finde data.json — tjek at token har adgang til italytrip."
-            : err && (err.status === 401 || err.status === 403)
-            ? "Forkert adgangskode."
-            : (err && err.message) || "Ukendt fejl — prøv igen.";
-          error.hidden = false;
-        });
+      try {
+        var token = input.value.trim();
+        alert("Klik registreret. Token-længde: " + token.length);
+        if (!token) return;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Tjekker …";
+        error.hidden = true;
+        githubGetFile(token)
+          .then(function () {
+            setStoredToken(token);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Lås op";
+            cleanup();
+            onDone(true);
+          })
+          .catch(function (err) {
+            console.error("Kunne ikke låse op:", err);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Lås op";
+            var msg =
+              err && err.status === 404
+                ? "Koden virker, men kan ikke finde data.json — tjek at token har adgang til italytrip."
+                : err && (err.status === 401 || err.status === 403)
+                ? "Forkert adgangskode."
+                : (err && err.message) || "Ukendt fejl — prøv igen.";
+            error.textContent = msg;
+            error.hidden = false;
+            alert("Fejl ved forespørgsel: " + msg);
+          });
+      } catch (syncErr) {
+        alert("Uventet script-fejl i onSubmit: " + (syncErr && syncErr.message ? syncErr.message : syncErr));
+      }
     }
     function onKeydown(e) {
       if (e.key === "Enter") onSubmit();
