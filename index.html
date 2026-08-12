@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amalfi–Bologna</title>
+<meta name="description" content="Dag-for-dag rejseplan: Amalfi, Rom, Firenze og Bologna, 14.–20. august 2026.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%8B%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#efe3cc;
+    --surface:#fbf5e8;
+    --surface-alt:#e4d4b0;
+    --ink:#2a1f16;
+    --ink-soft:#5e4a37;
+    --ink-faint:#8a7458;
+    --line:rgba(42,31,22,0.14);
+    --line-strong:rgba(42,31,22,0.26);
+    --terracotta:#c1502f;
+    --terracotta-deep:#9a3d22;
+    --olive:#6f7a3d;
+    --olive-deep:#57612f;
+    --sea:#1d6e86;
+    --sea-deep:#134f61;
+    --gold:#c0902e;
+    --gold-ink:#4a3410;
+    --shadow: 0 1px 2px rgba(42,31,22,0.08), 0 8px 24px -12px rgba(42,31,22,0.22);
+    --radius: 14px;
+    --serif: "Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,"Noto Serif",Georgia,serif;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono: "SF Mono","Cascadia Code","Roboto Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#1b160f;
+      --surface:#241c13;
+      --surface-alt:#2e2417;
+      --ink:#f1e4cc;
+      --ink-soft:#c7b393;
+      --ink-faint:#8f7c5c;
+      --line:rgba(241,228,204,0.14);
+      --line-strong:rgba(241,228,204,0.24);
+      --terracotta:#e2895d;
+      --terracotta-deep:#f0a578;
+      --olive:#a3b063;
+      --olive-deep:#b8c57e;
+      --sea:#57acc9;
+      --sea-deep:#79c2dc;
+      --gold:#e3b85b;
+      --gold-ink:#2a1d08;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:var(--serif); font-weight:600; text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--terracotta); color:var(--surface); }
+  :focus-visible{ outline:2px solid var(--sea); outline-offset:3px; border-radius:4px; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 20px; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:56px 0 40px;
+    background:
+      radial-gradient(560px 320px at 85% -10%, color-mix(in srgb, var(--gold) 20%, transparent), transparent 70%),
+      radial-gradient(480px 300px at -10% 10%, color-mix(in srgb, var(--sea) 16%, transparent), transparent 70%);
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:.5em;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--terracotta-deep);
+    font-weight:600;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--terracotta);
+    display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 8vw, 3.8rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    margin:.5rem 0 .6rem;
+    color:var(--ink);
+  }
+  .hero h1 .arrow{
+    color:var(--ink-faint);
+    font-weight:400;
+    padding:0 .12em;
+  }
+  .hero-sub{
+    font-size:clamp(1rem,2.4vw,1.15rem);
+    color:var(--ink-soft);
+    max-width:46ch;
+    line-height:1.55;
+  }
+
+  /* ---------- Countdown ticket ---------- */
+  .ticket{
+    margin-top:32px;
+    background:var(--surface-alt);
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    position:relative;
+  }
+  .ticket::before,.ticket::after{
+    content:"";
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--bg);
+  }
+  .ticket::before{ left:-10px; }
+  .ticket::after{ right:-10px; }
+  .ticket-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px 16px;
+    padding-bottom:14px;
+    margin-bottom:16px;
+    border-bottom:1px dashed var(--line-strong);
+  }
+  .ticket-route{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .ticket-route b{ color:var(--ink); }
+  .ticket-status{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--sea-deep);
+    background:color-mix(in srgb, var(--sea) 16%, transparent);
+    padding:3px 9px;
+    border-radius:999px;
+    font-weight:700;
+  }
+  .countdown{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+  .countdown .cell{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 4px 8px;
+    text-align:center;
+  }
+  .countdown .num{
+    font-family:var(--mono);
+    font-variant-numeric:tabular-nums;
+    font-size:clamp(1.5rem,5vw,2.1rem);
+    font-weight:700;
+    color:var(--terracotta-deep);
+    line-height:1;
+  }
+  .countdown .unit{
+    display:block;
+    margin-top:4px;
+    font-size:.66rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .ticket-note{
+    margin-top:14px;
+    font-size:.82rem;
+    color:var(--ink-soft);
+  }
+  .ticket-note b{ color:var(--ink); }
+
+  /* ---------- Sections ---------- */
+  section{ padding:44px 0; }
+  section + section{ border-top:1px solid var(--line); }
+  .section-head{ margin-bottom:24px; }
+  .section-head h2{ font-size:clamp(1.5rem,4vw,1.9rem); }
+  .section-head .eyebrow{ margin-bottom:.4rem; }
+  .section-head p{ color:var(--ink-soft); margin-top:.4rem; max-width:52ch; }
+
+  /* ---------- Route map ---------- */
+  .map-figure{ margin:0; }
+  .map-svg{ width:100%; height:auto; display:block; }
+  .map-caption{
+    margin-top:10px;
+    font-size:.82rem;
+    color:var(--ink-faint);
+    text-align:center;
+  }
+  .map-marker{ cursor:pointer; }
+  .map-marker circle.dot{ transition:r .15s ease; }
+  .map-marker:hover circle.dot, .map-marker:focus circle.dot{ r:10; }
+  .map-marker text{ font-family:var(--sans); }
+  .map-leg-label{
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:.03em;
+    fill:var(--ink-faint);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .route-line{
+      stroke-dasharray:6 7;
+      animation:dash 18s linear infinite;
+    }
+  }
+  @keyframes dash{ to{ stroke-dashoffset:-260; } }
+
+  /* ---------- Timeline ---------- */
+  .day{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .day[open] > summary{ border-bottom:1px solid var(--line); }
+  .day > summary{
+    list-style:none;
+    cursor:pointer;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .day > summary::-webkit-details-marker{ display:none; }
+  .day-date{
+    flex:0 0 auto;
+    width:56px;
+    text-align:center;
+    font-family:var(--mono);
+  }
+  .day-date .dow{
+    display:block;
+    font-size:.62rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .day-date .num{
+    display:block;
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--terracotta-deep);
+    line-height:1.1;
+  }
+  .day-head-main{ flex:1 1 auto; min-width:0; }
+  .day-head-main .city{
+    font-family:var(--serif);
+    font-size:1.15rem;
+    font-weight:600;
+  }
+  .day-head-main .teaser{
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+  .today-pill{
+    display:inline-block;
+    margin-left:8px;
+    font-family:var(--mono);
+    font-size:.6rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    background:var(--olive);
+    color:var(--surface);
+    padding:2px 7px;
+    border-radius:999px;
+    vertical-align:2px;
+  }
+  .day-preview-icons{
+    display:flex;
+    gap:6px;
+    flex:0 0 auto;
+  }
+  .day-preview-icons .icon{ width:16px; height:16px; color:var(--ink-faint); }
+  .chevron{
+    flex:0 0 auto;
+    width:18px; height:18px;
+    color:var(--ink-faint);
+    transition:transform .2s ease;
+  }
+  .day[open] .chevron{ transform:rotate(180deg); }
+
+  .day-body{ padding:4px 18px 20px; }
+  .map-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:12px 0 14px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:2px;
+  }
+  .map-link{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:.78rem;
+    font-weight:600;
+    color:var(--sea-deep);
+    background:color-mix(in srgb, var(--sea) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--sea) 30%, transparent);
+    padding:5px 10px 5px 8px;
+    border-radius:999px;
+    text-decoration:none;
+    transition:background .15s ease;
+  }
+  .map-link:hover{ background:color-mix(in srgb, var(--sea) 22%, transparent); }
+  .map-link .icon{ width:13px; height:13px; }
+
+  .activity{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+  }
+  .activity + .activity{ border-top:1px solid var(--line); }
+  .activity .icon-badge{
+    flex:0 0 auto;
+    width:34px; height:34px;
+    border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--surface-alt);
+    color:var(--terracotta-deep);
+  }
+  .activity .icon-badge .icon{ width:18px; height:18px; }
+  .activity.tone-sea .icon-badge{ color:var(--sea-deep); }
+  .activity.tone-olive .icon-badge{ color:var(--olive-deep); }
+  .activity-body{ flex:1 1 auto; min-width:0; padding-top:2px; }
+  .activity-time{
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .activity-text{ margin-top:2px; font-size:.95rem; color:var(--ink); }
+  .highlight-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    margin-top:8px;
+    font-family:var(--mono);
+    font-size:.62rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    background:var(--gold);
+    color:var(--gold-ink);
+    padding:3px 8px 3px 6px;
+    border-radius:999px;
+  }
+  .highlight-badge .icon{ width:11px; height:11px; }
+
+  /* ---------- Icons ---------- */
+  .icon{
+    width:20px; height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    display:block;
+  }
+
+  /* ---------- Footer ---------- */
+  .essentials{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px 28px;
+  }
+  .essentials .item{ min-width:160px; }
+  .essentials .label{
+    font-family:var(--mono);
+    font-size:.64rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .essentials .value{
+    margin-top:3px;
+    font-size:.95rem;
+    font-weight:600;
+  }
+  footer{
+    padding:32px 0 56px;
+    text-align:center;
+  }
+  footer .note{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:1rem;
+  }
+
+  @media (max-width:480px){
+    .countdown{ grid-template-columns:repeat(4,1fr); gap:6px; }
+    .essentials .item{ min-width:130px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="icon-ferry" viewBox="0 0 24 24">
+      <path d="M4 16h16l-2.5 4h-11z"/>
+      <path d="M12 16V5"/>
+      <path d="M12 5.5l4.5 2.5-4.5 2z"/>
+    </symbol>
+    <symbol id="icon-transit" viewBox="0 0 24 24">
+      <circle cx="4" cy="12" r="2.1"/>
+      <path d="M6.5 12h10" stroke-dasharray="2.2 2.4"/>
+      <path d="M16.5 8l4 4-4 4"/>
+    </symbol>
+    <symbol id="icon-landmark" viewBox="0 0 24 24">
+      <path d="M12 3l8 4.5H4z"/>
+      <path d="M5.5 8.5v9M9.5 8.5v9M14.5 8.5v9M18.5 8.5v9"/>
+      <path d="M4 20.5h16"/>
+    </symbol>
+    <symbol id="icon-pool" viewBox="0 0 24 24">
+      <path d="M2.5 10.5c1.8-1.8 3.6-1.8 5.4 0s3.6 1.8 5.4 0 3.6-1.8 5.4 0"/>
+      <path d="M2.5 15.5c1.8-1.8 3.6-1.8 5.4 0s3.6 1.8 5.4 0 3.6-1.8 5.4 0"/>
+      <circle cx="18" cy="5.5" r="2"/>
+    </symbol>
+    <symbol id="icon-wine" viewBox="0 0 24 24">
+      <path d="M7 3.5c0 5 1.8 8 5 8s5-3 5-8"/>
+      <path d="M7 3.5h10"/>
+      <path d="M12 11.5V19M8.7 21h6.6"/>
+    </symbol>
+    <symbol id="icon-bag" viewBox="0 0 24 24">
+      <path d="M6.5 8h11l-1 12h-9z"/>
+      <path d="M9 8a3 3 0 0 1 6 0"/>
+    </symbol>
+    <symbol id="icon-bed" viewBox="0 0 24 24">
+      <path d="M2.5 19.5v-6a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v6"/>
+      <path d="M2.5 17h19"/>
+      <path d="M6 11.5V9a2 2 0 0 1 2-2h2.4a2 2 0 0 1 2 2v2.5"/>
+    </symbol>
+    <symbol id="icon-food" viewBox="0 0 24 24">
+      <path d="M6.5 2.5v6a1.7 1.7 0 0 0 3.4 0v-6M8.2 2.5v18"/>
+      <path d="M16 2.5c2 2.2 2 6.6 0 8.7l-1 1v8.3"/>
+    </symbol>
+    <symbol id="icon-plane" viewBox="0 0 24 24">
+      <path d="M21.5 2.5L10.8 13.2"/>
+      <path d="M21.5 2.5l-6.6 19-3.8-8.6-8.6-3.8z"/>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3.6"/>
+      <path d="M12 2.5v3M12 18.5v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2.5 12h3M18.5 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>
+    </symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24">
+      <path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z"/>
+      <circle cx="12" cy="9.5" r="2.3"/>
+    </symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24">
+      <path d="M6 9l6 6 6-6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main>
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Rejseplan · 14.–20. august 2026</span>
+      <h1>Amalfi <span class="arrow">→</span> Roma <span class="arrow">→</span> Firenze <span class="arrow">→</span> Bologna</h1>
+      <p class="hero-sub">Seks dage fra kystvejens sving til Emilia-Romagnas sletter — færge, transport og gelato undervejs.</p>
+
+      <div class="ticket">
+        <div class="ticket-top">
+          <span class="ticket-route" id="ticket-route">Afgang …</span>
+          <span class="ticket-status" id="ticket-status">Nedtælling</span>
+        </div>
+        <div class="countdown" id="countdown" role="timer" aria-label="Nedtælling til afgang fra Bologna lufthavn">
+          <div class="cell"><span class="num" id="cd-days">–</span><span class="unit">Dage</span></div>
+          <div class="cell"><span class="num" id="cd-hours">–</span><span class="unit">Timer</span></div>
+          <div class="cell"><span class="num" id="cd-mins">–</span><span class="unit">Min</span></div>
+          <div class="cell"><span class="num" id="cd-secs">–</span><span class="unit">Sek</span></div>
+        </div>
+        <p class="ticket-note"><b>Check-in kl. <span id="ticket-note-time">–</span></b> · husk pas og hotelkvitteringer.</p>
+      </div>
+    </div>
+  </header>
+
+  <section id="rute">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Ruten</span>
+        <h2>Fire stop, seks dage</h2>
+        <p>Tryk på et stop for at hoppe til den dag i planen nedenfor.</p>
+      </div>
+
+      <figure class="map-figure">
+        <svg class="map-svg" viewBox="0 40 340 520" role="img" aria-label="Rutekort der viser rejsen fra Amalfi til Rom, Firenze og Bologna, forbundet af en linje med transportform angivet på hvert stræk">
+          <path d="M-10 470 C 40 440, 30 500, 90 480 S 170 430, 230 460" stroke="var(--sea)" stroke-opacity="0.35" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <path class="route-line" d="M80 500 L 150 380 L 130 220 L 230 90" fill="none" stroke="var(--terracotta)" stroke-width="2.5" stroke-linecap="round"/>
+
+          <g transform="translate(97,447)">
+            <use href="#icon-ferry" class="icon" width="15" height="15" x="0" y="-7" color="var(--sea-deep)"/>
+            <text class="map-leg-label" x="18" y="4">FÆRGE + TRANSPORT</text>
+          </g>
+          <g transform="translate(122,300)">
+            <use href="#icon-transit" class="icon" width="15" height="15" x="0" y="-7" color="var(--terracotta-deep)"/>
+            <text class="map-leg-label" x="18" y="4">TRANSPORT</text>
+          </g>
+          <g transform="translate(165,155)">
+            <use href="#icon-transit" class="icon" width="15" height="15" x="0" y="-7" color="var(--terracotta-deep)"/>
+            <text class="map-leg-label" x="18" y="4">TRANSPORT</text>
+          </g>
+
+          <g class="map-marker" tabindex="0" role="button" aria-label="Gå til fredag: Amalfi og Rom" data-target="day-1">
+            <circle class="dot" cx="80" cy="500" r="8" fill="var(--sea)"/>
+            <circle cx="80" cy="500" r="8" fill="none" stroke="var(--surface)" stroke-width="2"/>
+            <text id="route-amalfi-name" x="80" y="527" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Amalfi</text>
+            <text id="route-amalfi-date" x="80" y="542" text-anchor="middle" font-size="9.5" fill="var(--ink-faint)" font-family="var(--mono)">14/8</text>
+          </g>
+
+          <g class="map-marker" tabindex="0" role="button" aria-label="Gå til Rom-dagene" data-target="day-2">
+            <circle class="dot" cx="150" cy="380" r="9" fill="var(--terracotta)"/>
+            <circle cx="150" cy="380" r="9" fill="none" stroke="var(--surface)" stroke-width="2"/>
+            <text id="route-roma-name" x="167" y="376" font-size="14" font-weight="600" fill="var(--ink)">Roma</text>
+            <text id="route-roma-date" x="167" y="391" font-size="9.5" fill="var(--ink-faint)" font-family="var(--mono)">15.–16/8</text>
+          </g>
+
+          <g class="map-marker" tabindex="0" role="button" aria-label="Gå til Firenze-dagene" data-target="day-4">
+            <circle class="dot" cx="130" cy="220" r="9" fill="var(--olive)"/>
+            <circle cx="130" cy="220" r="9" fill="none" stroke="var(--surface)" stroke-width="2"/>
+            <text id="route-firenze-name" x="113" y="216" text-anchor="end" font-size="14" font-weight="600" fill="var(--ink)">Firenze</text>
+            <text id="route-firenze-date" x="113" y="231" text-anchor="end" font-size="9.5" fill="var(--ink-faint)" font-family="var(--mono)">17.–18/8</text>
+          </g>
+
+          <g class="map-marker" tabindex="0" role="button" aria-label="Gå til Bologna-dagene og afgang" data-target="day-6">
+            <circle class="dot" cx="230" cy="90" r="9" fill="var(--gold)"/>
+            <circle cx="230" cy="90" r="9" fill="none" stroke="var(--surface)" stroke-width="2"/>
+            <text id="route-bologna-name" x="247" y="86" font-size="14" font-weight="600" fill="var(--ink)">Bologna</text>
+            <text id="route-bologna-date" x="247" y="101" font-size="9.5" fill="var(--ink-faint)" font-family="var(--mono)">19.–20/8</text>
+            <use href="#icon-plane" class="icon" width="14" height="14" x="247" y="107" color="var(--terracotta-deep)"/>
+          </g>
+        </svg>
+        <figcaption class="map-caption">Amalfi → Rom (færge + transport) → Firenze (transport) → Bologna (transport) → afgang BLQ</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="plan">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Itineraret</span>
+        <h2>Dag for dag</h2>
+        <p>Tryk på en dag for at folde den ud. Klokkeslæt er et forslag til rækkefølge og tempo — ret dem til i <code>data.json</code>, når I kender de rigtige tider.</p>
+      </div>
+
+      <div id="timeline">
+        <p style="color:var(--ink-faint)">Indlæser rejseplan…</p>
+      </div>
+
+      <div class="essentials" style="margin-top:20px">
+        <div class="item">
+          <span class="label">Check-in</span>
+          <span class="value" id="ess-checkin">–</span>
+        </div>
+        <div class="item">
+          <span class="label">Afgang</span>
+          <span class="value" id="ess-departure">–</span>
+        </div>
+        <div class="item">
+          <span class="label">Ruten</span>
+          <span class="value" id="ess-route">–</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p class="note">Gem linket — planen kan tjekkes når som helst undervejs.</p>
+    </div>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+{
+  "_readme": "Redigér denne fil for at ændre planen. Se README.md i repoet for en guide til at tilføje/fjerne et punkt på en dag. Gyldige ikon-navne: ferry, transit, landmark, pool, wine, bag, bed, food, plane, sun. Gyldige tone-navne (valgfrit, styrer farven på ikonet): sea, olive (udelad for standard terracotta).",
+
+  "trip": {
+    "departure": {
+      "airport": "Bologna (BLQ)",
+      "dateLabel": "Torsdag 20. august",
+      "checkIn": "13:45",
+      "departureTime": "16:15",
+      "iso": "2026-08-20T16:15:00+02:00"
+    }
+  },
+
+  "route": [
+    { "id": "amalfi", "name": "Amalfi", "date": "14/8", "query": "Amalfi, Italy" },
+    { "id": "roma", "name": "Roma", "date": "15.–16/8", "query": "Rome, Italy" },
+    { "id": "firenze", "name": "Firenze", "date": "17.–18/8", "query": "Florence, Italy" },
+    { "id": "bologna", "name": "Bologna", "date": "19.–20/8", "query": "Bologna, Italy" }
+  ],
+
+  "days": [
+    {
+      "id": "day-1",
+      "date": "2026-08-14",
+      "dow": "Fre",
+      "dayNum": "14",
+      "city": "Amalfi → Rom",
+      "teaser": "Færgetur langs kysten, så videre til Rom",
+      "mapLinks": [
+        { "label": "Amalfi", "query": "Amalfi, Italy" },
+        { "label": "Rom", "query": "Rome, Italy" }
+      ],
+      "activities": [
+        { "time": "10:30–11:10", "icon": "ferry", "tone": "sea", "text": "Færgetur til Amalfi by.", "highlight": "Amalfikysten" },
+        { "time": "13:30–17:00", "icon": "transit", "text": "Videre til Rom. Ankomst fredag aften." }
+      ]
+    },
+    {
+      "id": "day-2",
+      "date": "2026-08-15",
+      "dow": "Lør",
+      "dayNum": "15",
+      "city": "Rom",
+      "teaser": "I Rom, hotel med pool",
+      "mapLinks": [
+        { "label": "Rom", "query": "Rome, Italy" }
+      ],
+      "activities": [
+        { "time": "09:00–18:00", "icon": "landmark", "text": "Rom udforskes i eget tempo." },
+        { "time": "18:30–20:00", "icon": "pool", "tone": "sea", "text": "Afkøling ved hotellets pool.", "highlight": "Pool-dag" }
+      ]
+    },
+    {
+      "id": "day-3",
+      "date": "2026-08-16",
+      "dow": "Søn",
+      "dayNum": "16",
+      "city": "Rom",
+      "teaser": "Rom, Rom, Rom",
+      "mapLinks": [
+        { "label": "Rom", "query": "Rome, Italy" }
+      ],
+      "activities": [
+        { "time": "09:00–13:00", "icon": "landmark", "text": "Endnu en runde seværdigheder — for fuld udblæsning." },
+        { "time": "13:00–18:00", "icon": "landmark", "text": "Mere Rom, og en gelato undervejs." }
+      ]
+    },
+    {
+      "id": "day-4",
+      "date": "2026-08-17",
+      "dow": "Man",
+      "dayNum": "17",
+      "city": "Firenze",
+      "teaser": "Rejsedag, shopping og aftensmad",
+      "mapLinks": [
+        { "label": "Firenze", "query": "Florence, Italy" }
+      ],
+      "activities": [
+        { "time": "09:30–12:30", "icon": "transit", "text": "Rejse til Firenze." },
+        { "time": "13:30–16:30", "icon": "bag", "tone": "olive", "text": "Shopping i centrum." },
+        { "time": "19:30–21:30", "icon": "food", "text": "Middag i Firenze." }
+      ]
+    },
+    {
+      "id": "day-5",
+      "date": "2026-08-18",
+      "dow": "Tir",
+      "dayNum": "18",
+      "city": "Firenze",
+      "teaser": "Afslapning, mad og vingård",
+      "mapLinks": [
+        { "label": "Firenze", "query": "Florence, Italy" }
+      ],
+      "activities": [
+        { "time": "09:00–12:00", "icon": "sun", "text": "Afslapningsdag — ingen planer, ingen stress." },
+        { "time": "13:00–16:00", "icon": "wine", "tone": "olive", "text": "Besøg på en vingård i Toscana.", "highlight": "Vingårdsbesøg" },
+        { "time": "19:30–21:30", "icon": "food", "text": "God mad, ingen hastværk." }
+      ]
+    },
+    {
+      "id": "day-6",
+      "date": "2026-08-19",
+      "dow": "Ons",
+      "dayNum": "19",
+      "city": "Firenze → Bologna",
+      "teaser": "Rejsedag, hotel og aftensmad i Bologna",
+      "mapLinks": [
+        { "label": "Firenze", "query": "Florence, Italy" },
+        { "label": "Bologna", "query": "Bologna, Italy" }
+      ],
+      "activities": [
+        { "time": "10:00–11:30", "icon": "transit", "text": "Rejse til Bologna." },
+        { "time": "12:00–13:30", "icon": "bed", "text": "Finde og tjekke ind på hotellet." },
+        { "time": "19:30–21:30", "icon": "food", "text": "Aftensmad i Bologna." }
+      ]
+    },
+    {
+      "id": "day-7",
+      "date": "2026-08-20",
+      "dow": "Tor",
+      "dayNum": "20",
+      "city": "Bologna → hjem",
+      "teaser": "Frokost, chill og afgang kl. 16:15",
+      "mapLinks": [
+        { "label": "Bologna", "query": "Bologna, Italy" },
+        { "label": "Lufthavn (BLQ)", "query": "Bologna Guglielmo Marconi Airport" }
+      ],
+      "activities": [
+        { "time": "10:30–12:30", "icon": "food", "text": "Frokost og chill inden afgang." },
+        { "time": "13:45–16:15", "icon": "plane", "tone": "sea", "text": "Check-in kl. 13:45 · afgang fra lufthavnen kl. 16:15." }
+      ]
+    }
+  ]
+}
