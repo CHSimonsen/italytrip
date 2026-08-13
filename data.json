@@ -61,15 +61,22 @@
           "highlight": "Amalfikysten"
         },
         {
+          "time": "11:15–12:30",
+          "text": "Amalfi Domkirke (Duomo di Sant'Andrea) og Piazza Duomo — byens hovedseværdighed, 62 trin op til indgangen (ca. 3€ for at gå indenfor). Bagefter en gåtur i den historiske bykerne, som let klares på under 20 minutter."
+        },
+        {
+          "time": "12:30–13:15",
+          "text": "Frokost i Amalfi inden afgang — rig mulighed for restauranter tæt på havnefronten og Piazza Duomo."
+        },
+        {
           "time": "13:30–17:00",
-          "icon": "transit",
-          "text": "Videre til Rom. Ankomst fredag aften."
+          "text": "Videre til Rom: SITA-bus til Salerno (ca. 1t15m), derefter tog videre til Rom (ca. 2t). Ankomst til Rom omkring kl. 17, fredag aften."
         }
       ],
       "suggestion": {
-        "text": "I har et par timer i Amalfi inden I kører videre — brug dem på den 5 minutters gang gennem tunnelen fra hovedpladsen til nabolandsbyen Atrani. Langt mindre turisttæt end Amalfi selv: ophængt vasketøj, fiskere der reparerer net, og lokale der sludrer fra altanerne.",
-        "url": "https://exploredbymarta.com/travel/italy/hidden-gems-on-the-amalfi-coast/",
-        "label": "Læs mere om Atrani"
+        "text": "For strækningen til Salerno: overvej færgen i stedet for SITA-bussen i planen — kun ca. 35 minutter (mod 1t15m), og en flot sejlads langs kysten oveni. Til gengæld sejler den sjældnere og kan være udsolgt i højsæsonen, så tjek og køb billet samme morgen i Amalfi hvis I vil prøve det. Bussen kræver ingen forudbestilling og er det sikre valg.",
+        "url": "https://www.rome2rio.com/s/Salerno/Amalfi-Italy",
+        "label": "Se transportmuligheder Amalfi–Salerno"
       },
       "notes": "Vi vil gerne tage en færge til Amalfi for en dagstur inden vi tager til Rom. Vi vil gerne have anbefalinger til hvad vi skal se i Amalfi - de mest interessante ting. Og derudover et forslag til, hvordan vi nemmest muligt kommer til Rom. Foreslå en plan for dagen baseret på dette."
     },
