@@ -63,6 +63,13 @@ Hver dag kan have et `"suggestion"`-felt, som vises nederst i dagens kort:
 
 `text` er påkrævet, `url`/`label` er valgfrie (viser et link hvis sat). Dette redigeres kun i `data.json` — der er ingen knap på siden til at tilføje/rette forslag. Spørg Claude om at researche og opdatere et forslag for en given dag, hvis I vil ændre det.
 
+**Standard for et forslag** (gælder når Claude skriver eller opdaterer et): det skal ikke bare være "en sej ting man kan se i byen" — det skal give mening i forhold til den konkrete dag. Før Claude foreslår noget, tjekker den:
+
+- **Dagens plan**: hvor er der faktisk luft til noget (mellem to punkter, før/efter et fast tidspunkt), og hvad er allerede dækket, så forslaget ikke overlapper eller kolliderer med tidsplanen.
+- **Dagens noter** (`"notes"`-feltet, se nedenfor): hvis I har skrevet noget for den dag, skal det som minimum tages med i overvejelsen, ikke ignoreres til fordel for et generisk forslag.
+
+Et forslag der ikke passer ind nogen steder i dagens plan, er ikke et godt forslag, uanset hvor interessant stedet er.
+
 ### "Jeres noter" — fritekst pr. dag, som Claude kan handle på
 
 Hver dag har et **"📝 Jeres noter"**-felt (eller en **"+ Tilføj noter"**-knap, hvis det er tomt), nederst i dagens kort, lige over "Forslag fra Claude". I skriver hvad som helst dertil — løse idéer, "vi vil gerne se X", ting I har hørt om, tvivl om planen — ingen struktur krævet. Redigeres på samme måde som et punkt (kræver adgangskoden), og gemmes direkte i `data.json`'s `"notes"`-felt for den dag.
