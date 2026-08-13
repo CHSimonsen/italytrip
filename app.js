@@ -83,8 +83,6 @@
 
   /* ---------- Timeline ---------- */
   function renderActivity(act, dayId, index) {
-    var toneClass = act.tone ? " tone-" + act.tone : "";
-    var badge = act.highlight ? '<span class="highlight-badge">' + esc(act.highlight) + "</span>" : "";
     var actionsHtml = "";
     if (isEditMode()) {
       actionsHtml =
@@ -102,9 +100,7 @@
         "</span>";
     }
     return (
-      '<div class="activity' +
-      toneClass +
-      '" data-index="' +
+      '<div class="activity" data-index="' +
       index +
       '">' +
       '<span class="activity-body">' +
@@ -114,7 +110,6 @@
       '<p class="activity-text">' +
       esc(act.text) +
       "</p>" +
-      badge +
       "</span>" +
       actionsHtml +
       "</div>"
@@ -564,20 +559,6 @@
       '<div class="field"><label>Beskrivelse</label><input type="text" class="f-text" placeholder="Hvad sker der?" value="' +
       esc(vals.text) +
       '"></div>' +
-      '<div class="field"><label>Farvetone (valgfri)</label><select class="f-tone">' +
-      '<option value=""' +
-      (!vals.tone ? " selected" : "") +
-      ">Standard</option>" +
-      '<option value="sea"' +
-      (vals.tone === "sea" ? " selected" : "") +
-      ">Hav (blå)</option>" +
-      '<option value="olive"' +
-      (vals.tone === "olive" ? " selected" : "") +
-      ">Oliven (grøn)</option>" +
-      "</select></div>" +
-      '<div class="field"><label>Highlight-badge (valgfri)</label><input type="text" class="f-highlight" placeholder="f.eks. Pool-dag" value="' +
-      esc(vals.highlight || "") +
-      '"></div>' +
       '<div class="add-step-form-actions">' +
       '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
       '<button type="button" class="btn-primary f-save">' +
@@ -590,16 +571,11 @@
   function readStepForm(form) {
     var time = form.querySelector(".f-time").value.trim();
     var text = form.querySelector(".f-text").value.trim();
-    var tone = form.querySelector(".f-tone").value;
-    var highlight = form.querySelector(".f-highlight").value.trim();
     if (!time || !text) {
       showToast("Udfyld mindst tidspunkt og beskrivelse.");
       return null;
     }
-    var activity = { time: time, text: text };
-    if (tone) activity.tone = tone;
-    if (highlight) activity.highlight = highlight;
-    return activity;
+    return { time: time, text: text };
   }
 
   function showAddForm(dayId) {
@@ -608,7 +584,7 @@
 
     var form = document.createElement("div");
     form.className = "add-step-form";
-    form.innerHTML = stepFieldsHtml("Tilføj", { time: "", text: "", tone: "", highlight: "" });
+    form.innerHTML = stepFieldsHtml("Tilføj", { time: "", text: "" });
     actions.insertBefore(form, actions.firstChild);
     form.querySelector(".f-time").focus();
 

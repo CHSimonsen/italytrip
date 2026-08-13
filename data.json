@@ -1,5 +1,5 @@
 {
-  "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Ikoner vises ikke længere på siden — 'icon'-feltet på ældre punkter bliver ignoreret og kan udelades i nye. Gyldige tone-navne (valgfrit, farver klokkeslættet): sea, olive (udelad for standard).",
+  "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Et punkt har kun 'time' og 'text'. Felterne 'icon', 'tone' og 'highlight' vises ikke længere på siden — de bliver ignoreret på ældre punkter og kan udelades i nye.",
 
   "trip": {
     "departure": {
