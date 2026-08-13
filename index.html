@@ -449,6 +449,38 @@
   .activity-delete:hover{ background:color-mix(in srgb, var(--terracotta) 14%, transparent); }
 
   .day-body-actions{ padding-top:10px; }
+
+  .claude-suggestion{
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px dashed var(--line-strong);
+    border-radius:10px;
+    background:color-mix(in srgb, var(--sea) 6%, transparent);
+  }
+  .claude-suggestion-label{
+    display:block;
+    font-family:var(--mono);
+    font-size:.64rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--sea-deep);
+    margin-bottom:6px;
+  }
+  .claude-suggestion-text{
+    font-size:.88rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+  }
+  .claude-suggestion-link{
+    display:inline-block;
+    margin-top:8px;
+    font-size:.8rem;
+    font-weight:600;
+    color:var(--sea-deep);
+    text-decoration:none;
+  }
+  .claude-suggestion-link:hover{ text-decoration:underline; }
   .add-step-btn{
     font-family:var(--mono);
     font-size:.72rem;
@@ -774,6 +806,6 @@
 </div>
 <div id="toast" class="toast" hidden></div>
 
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

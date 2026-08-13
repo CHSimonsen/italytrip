@@ -52,6 +52,16 @@ Kun starttidspunkt (uden sluttid) er også gyldigt:
 | `text` | Ja | Beskrivelsen der vises |
 | `icon`, `tone`, `highlight` | Nej (ikke i brug) | Ældre punkter kan have disse felter fra før ikoner/farvetone/highlight-badges blev fjernet fra siden — de bliver simpelthen ignoreret nu. Kan udelades i nye punkter. |
 
+### "Forslag fra Claude"
+
+Hver dag kan have et `"suggestion"`-felt, som vises nederst i dagens kort:
+
+```json
+"suggestion": { "text": "...", "url": "https://...", "label": "Læs mere om X" }
+```
+
+`text` er påkrævet, `url`/`label` er valgfrie (viser et link hvis sat). Dette redigeres kun i `data.json` — der er ingen knap på siden til at tilføje/rette forslag. Spørg Claude om at researche og opdatere et forslag for en given dag, hvis I vil ændre det.
+
 ### Tilføj en helt ny dag
 
 Kopiér et helt dag-objekt (fra `{ "id": "day-x", ...` til den matchende `}`) og indsæt det i `"days"`-listen. Husk unikt `id` og korrekt `date` (format `ÅÅÅÅ-MM-DD`) — datoen bruges til automatisk at folde "i dag" ud, når man tjekker siden på selve rejsedagen.

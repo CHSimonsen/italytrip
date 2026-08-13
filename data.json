@@ -33,7 +33,12 @@
       "activities": [
         { "time": "10:30–11:10", "icon": "ferry", "tone": "sea", "text": "Færgetur til Amalfi by.", "highlight": "Amalfikysten" },
         { "time": "13:30–17:00", "icon": "transit", "text": "Videre til Rom. Ankomst fredag aften." }
-      ]
+      ],
+      "suggestion": {
+        "text": "I har et par timer i Amalfi inden I kører videre — brug dem på den 5 minutters gang gennem tunnelen fra hovedpladsen til nabolandsbyen Atrani. Langt mindre turisttæt end Amalfi selv: ophængt vasketøj, fiskere der reparerer net, og lokale der sludrer fra altanerne.",
+        "url": "https://exploredbymarta.com/travel/italy/hidden-gems-on-the-amalfi-coast/",
+        "label": "Læs mere om Atrani"
+      }
     },
     {
       "id": "day-2",
@@ -48,7 +53,12 @@
       "activities": [
         { "time": "09:00–18:00", "icon": "landmark", "text": "Rom udforskes i eget tempo." },
         { "time": "18:30–20:00", "icon": "pool", "tone": "sea", "text": "Afkøling ved hotellets pool.", "highlight": "Pool-dag" }
-      ]
+      ],
+      "suggestion": {
+        "text": "Byt en time ud på egen-tempo-dagen med Testaccio — Roms mest autentiske madkvarter, uden for de klassiske ruter. Gå gennem Mercato di Testaccio, og kig forbi Cestius-pyramiden og den ikke-katolske kirkegård lige i nærheden.",
+        "url": "https://mamalovesrome.com/hidden-gems-rome-off-the-beaten-path/",
+        "label": "Læs mere om Testaccio"
+      }
     },
     {
       "id": "day-3",
@@ -63,7 +73,12 @@
       "activities": [
         { "time": "09:00–13:00", "icon": "landmark", "text": "Endnu en runde seværdigheder — for fuld udblæsning." },
         { "time": "13:00–18:00", "icon": "landmark", "text": "Mere Rom, og en gelato undervejs." }
-      ]
+      ],
+      "suggestion": {
+        "text": "For noget helt andet end de klassiske sights: Kapucinerkrypten under kirken Santa Maria della Concezione, hvor gangene er dekoreret med knogler fra afdøde munke. Uhyggeligt, mærkeligt og overstået på 20 minutter — perfekt som en kort afstikker mellem de store seværdigheder.",
+        "url": "https://wediditourway.com/hidden-gems-in-rome-less-touristy-things-to-do/",
+        "label": "Læs mere om Kapucinerkrypten"
+      }
     },
     {
       "id": "day-4",
@@ -79,7 +94,12 @@
         { "time": "09:30–12:30", "icon": "transit", "text": "Rejse til Firenze." },
         { "time": "13:30–16:30", "icon": "bag", "tone": "olive", "text": "Shopping i centrum." },
         { "time": "19:30–21:30", "icon": "food", "text": "Middag i Firenze." }
-      ]
+      ],
+      "suggestion": {
+        "text": "Efter shoppingen, før middagen: gå op til San Miniato al Monte, lige ovenfor det mere overfyldte Piazzale Michelangelo. Samme storslåede udsigt over Firenze, men roligere — munkene synger ofte aftensang ved solnedgang. Giardino delle Rose lige nedenfor har samme udsigt, gratis og næsten uden kø, hvis I vil undgå trapperne helt op.",
+        "url": "https://townsofitaly.com/en/blog/best-sunset-spots-florence",
+        "label": "Læs mere om udsigtspunkter i Firenze"
+      }
     },
     {
       "id": "day-5",
@@ -95,7 +115,12 @@
         { "time": "09:00–12:00", "icon": "sun", "text": "Afslapningsdag — ingen planer, ingen stress." },
         { "time": "13:00–16:00", "icon": "wine", "tone": "olive", "text": "Besøg på en vingård i Toscana.", "highlight": "Vingårdsbesøg" },
         { "time": "19:30–21:30", "icon": "food", "text": "God mad, ingen hastværk." }
-      ]
+      ],
+      "suggestion": {
+        "text": "Til den planløse formiddag: en kaffe på taget af Biblioteca delle Oblate, få skridt fra Duomoen. En af Firenzes bedst bevarede hemmeligheder — udsigt direkte mod kuplen, og næsten ingen turister ved det findes. Perfekt tempo før eftermiddagens vingårdsbesøg.",
+        "url": "https://florenceticket.com/discover/best-viewpoints/",
+        "label": "Læs mere om Firenzes udsigtspunkter"
+      }
     },
     {
       "id": "day-6",
@@ -112,7 +137,12 @@
         { "time": "10:00–11:30", "icon": "transit", "text": "Rejse til Bologna." },
         { "time": "12:00–13:30", "icon": "bed", "text": "Finde og tjekke ind på hotellet." },
         { "time": "19:30–21:30", "icon": "food", "text": "Aftensmad i Bologna." }
-      ]
+      ],
+      "suggestion": {
+        "text": "Første eftermiddag i Bologna: gå en tur under portikerne til Piazza Maggiore, kig ind i Basilica di San Petronio (den ufærdige facade er en del af charmen), og kryds over til Piazza del Nettuno for at se Neptunfontænen. Overskud til det? Torre dell'Orologio tager kun 30-45 minutter at bestige og giver udsigt over det hele.",
+        "url": "https://www.bolognawelcome.com/en/blog/top-10-things-to-do-in-bologna-",
+        "label": "Læs mere om Bologna centrum"
+      }
     },
     {
       "id": "day-7",
@@ -128,7 +158,12 @@
       "activities": [
         { "time": "10:30–12:30", "icon": "food", "text": "Frokost og chill inden afgang." },
         { "time": "13:45–16:15", "icon": "plane", "tone": "sea", "text": "Check-in kl. 13:45 · afgang fra lufthavnen kl. 16:15." }
-      ]
+      ],
+      "suggestion": {
+        "text": "Til den sidste frokost: tag ind i Quadrilatero-kvarteret lige ved centrum — Bolognas gamle markedskvarter med charcuteri, frisk pasta og bagværk. Bologna kaldes Italiens madhovedstad af en grund; bedre afslutning end en tilfældig café, når tiden alligevel er knap før check-in.",
+        "url": "https://www.earthtrekkers.com/things-to-do-in-bologna/",
+        "label": "Læs mere om Quadrilatero"
+      }
     }
   ]
 }

@@ -121,6 +121,26 @@
     return '<button type="button" class="add-step-btn" data-day="' + esc(dayId) + '">+ Tilføj punkt</button>';
   }
 
+  function renderSuggestion(suggestion) {
+    if (!suggestion || !suggestion.text) return "";
+    var link = suggestion.url
+      ? '<a class="claude-suggestion-link" href="' +
+        esc(suggestion.url) +
+        '" target="_blank" rel="noopener">' +
+        esc(suggestion.label || "Læs mere") +
+        " →</a>"
+      : "";
+    return (
+      '<div class="claude-suggestion">' +
+      '<span class="claude-suggestion-label">✨ Forslag fra Claude</span>' +
+      '<p class="claude-suggestion-text">' +
+      esc(suggestion.text) +
+      "</p>" +
+      link +
+      "</div>"
+    );
+  }
+
   function renderDay(day, isFirst) {
     var mapLinksHtml = (day.mapLinks || [])
       .map(function (l) {
@@ -174,6 +194,7 @@
       '">' +
       renderAddStepButton(day.id) +
       "</div>" +
+      renderSuggestion(day.suggestion) +
       "</div>";
     return el;
   }
