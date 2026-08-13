@@ -632,7 +632,7 @@
     form.className = "add-step-form";
     form.innerHTML = stepFieldsHtml("Tilføj", { time: "", text: "" });
     actions.insertBefore(form, actions.firstChild);
-    form.querySelector(".f-time-start").focus();
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
     form.querySelector(".f-cancel").addEventListener("click", function () {
       form.remove();
@@ -674,7 +674,7 @@
     form.className = "add-step-form";
     form.innerHTML = stepFieldsHtml("Gem", act);
     activityEl.insertAdjacentElement("afterend", form);
-    form.querySelector(".f-time-start").focus();
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
     form.querySelector(".f-cancel").addEventListener("click", function () {
       form.remove();
