@@ -491,6 +491,68 @@
     text-decoration:none;
   }
   .claude-suggestion-link:hover{ text-decoration:underline; }
+
+  .day-notes{
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px dashed var(--line-strong);
+    border-radius:10px;
+    background:color-mix(in srgb, var(--olive) 8%, transparent);
+  }
+  .day-notes-label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--mono);
+    font-size:.64rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--olive-deep);
+    margin-bottom:6px;
+  }
+  .day-notes-text{
+    font-size:.88rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+    white-space:pre-wrap;
+  }
+  .notes-edit{
+    flex:0 0 auto;
+    width:20px; height:20px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--olive-deep);
+    cursor:pointer;
+  }
+  .notes-edit .icon{ width:11px; height:11px; }
+  .notes-edit:hover{ background:color-mix(in srgb, var(--olive) 14%, transparent); }
+  .notes-add-btn{
+    margin-top:16px;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--olive-deep);
+    background:color-mix(in srgb, var(--olive) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--olive) 30%, transparent);
+    border-radius:999px;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .add-step-form textarea{
+    font:inherit;
+    font-size:.9rem;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid var(--line-strong);
+    background:var(--surface);
+    color:var(--ink);
+    resize:vertical;
+  }
   .add-step-btn{
     font-family:var(--mono);
     font-size:.72rem;
@@ -816,6 +878,6 @@
 </div>
 <div id="toast" class="toast" hidden></div>
 
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>

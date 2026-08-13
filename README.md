@@ -63,6 +63,17 @@ Hver dag kan have et `"suggestion"`-felt, som vises nederst i dagens kort:
 
 `text` er påkrævet, `url`/`label` er valgfrie (viser et link hvis sat). Dette redigeres kun i `data.json` — der er ingen knap på siden til at tilføje/rette forslag. Spørg Claude om at researche og opdatere et forslag for en given dag, hvis I vil ændre det.
 
+### "Jeres noter" — fritekst pr. dag, som Claude kan handle på
+
+Hver dag har et **"📝 Jeres noter"**-felt (eller en **"+ Tilføj noter"**-knap, hvis det er tomt), nederst i dagens kort, lige over "Forslag fra Claude". I skriver hvad som helst dertil — løse idéer, "vi vil gerne se X", ting I har hørt om, tvivl om planen — ingen struktur krævet. Redigeres på samme måde som et punkt (kræver adgangskoden), og gemmes direkte i `data.json`'s `"notes"`-felt for den dag.
+
+Det er ikke en AI-funktion i sig selv — siden er stadig helt statisk. Sådan bruger I det:
+
+1. Skriv jeres noter for en given dag på siden.
+2. Bed Claude (i en chat, fx her) om at læse noterne for den dag og opdatere planen ud fra dem — Claude kan researche, tilføje/rette/slette punkter, og opdatere "Forslag fra Claude", og gemmer/pusher det hele til repoet, ligesom med alt andet på siden.
+
+Claude rydder ikke noterne automatisk bagefter — sig til, hvis I vil have dem slettet igen når de er brugt.
+
 ### Tilføj en helt ny dag
 
 Kopiér et helt dag-objekt (fra `{ "id": "day-x", ...` til den matchende `}`) og indsæt det i `"days"`-listen. Husk unikt `id` og korrekt `date` (format `ÅÅÅÅ-MM-DD`) — datoen bruges til automatisk at folde "i dag" ud, når man tjekker siden på selve rejsedagen.

@@ -121,6 +121,30 @@
     return '<button type="button" class="add-step-btn" data-day="' + esc(dayId) + '">+ Tilføj punkt</button>';
   }
 
+  function renderNotes(dayId, notes) {
+    if (notes) {
+      var editBtn = isEditMode()
+        ? '<button type="button" class="notes-edit" data-day="' +
+          esc(dayId) +
+          '" aria-label="Rediger noter"><svg class="icon"><use href="#icon-pencil"></use></svg></button>'
+        : "";
+      return (
+        '<div class="day-notes">' +
+        '<span class="day-notes-label">📝 Jeres noter' +
+        editBtn +
+        "</span>" +
+        '<p class="day-notes-text">' +
+        esc(notes) +
+        "</p>" +
+        "</div>"
+      );
+    }
+    if (isEditMode()) {
+      return '<button type="button" class="notes-add-btn" data-day="' + esc(dayId) + '">+ Tilføj noter</button>';
+    }
+    return "";
+  }
+
   function renderSuggestion(suggestion) {
     if (!suggestion || !suggestion.text) return "";
     var link = suggestion.url
@@ -198,6 +222,7 @@
       '">' +
       renderAddStepButton(day.id) +
       "</div>" +
+      renderNotes(day.id, day.notes) +
       renderSuggestion(day.suggestion) +
       "</div>";
     return el;
@@ -768,6 +793,60 @@
     });
   }
 
+  function showNotesForm(dayId) {
+    var el = document.getElementById(dayId);
+    if (!el) return;
+    var body = el.querySelector(".day-body");
+    if (!body || body.querySelector(".notes-form")) return;
+
+    var day = (APP_DATA.days || []).filter(function (d) {
+      return d.id === dayId;
+    })[0];
+    if (!day) return;
+
+    el.open = true;
+
+    var existingNotes = body.querySelector(".day-notes");
+    var addBtn = body.querySelector(".notes-add-btn");
+    if (existingNotes) existingNotes.style.display = "none";
+    if (addBtn) addBtn.style.display = "none";
+
+    var form = document.createElement("div");
+    form.className = "add-step-form notes-form";
+    form.innerHTML =
+      '<div class="field"><label>Jeres noter (fritekst)</label><textarea class="f-notes" rows="4" placeholder="Løse tanker, ønsker, steder I har hørt om...">' +
+      esc(day.notes || "") +
+      "</textarea></div>" +
+      '<div class="add-step-form-actions">' +
+      '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
+      '<button type="button" class="btn-primary f-save">Gem</button>' +
+      "</div>";
+
+    var suggestionBox = body.querySelector(".claude-suggestion");
+    if (suggestionBox) body.insertBefore(form, suggestionBox);
+    else body.appendChild(form);
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    function restore() {
+      form.remove();
+      if (existingNotes) existingNotes.style.display = "";
+      if (addBtn) addBtn.style.display = "";
+    }
+
+    form.querySelector(".f-cancel").addEventListener("click", restore);
+    form.querySelector(".f-save").addEventListener("click", function () {
+      var text = form.querySelector(".f-notes").value.trim();
+      form.remove();
+      withEdit(function (data) {
+        var d = data.days.filter(function (dd) {
+          return dd.id === dayId;
+        })[0];
+        if (d) d.notes = text;
+        return data;
+      }, "Opdater noter for " + dayId + " (via siden)");
+    });
+  }
+
   function cssEscape(s) {
     return String(s).replace(/["\\]/g, "\\$&");
   }
@@ -806,6 +885,18 @@
       if (titleEditBtn) {
         e.preventDefault(); // inside <summary> -- don't let the native toggle fire too
         showTitleEditForm(titleEditBtn.getAttribute("data-day"));
+        return;
+      }
+
+      var notesEditBtn = e.target.closest(".notes-edit");
+      if (notesEditBtn) {
+        showNotesForm(notesEditBtn.getAttribute("data-day"));
+        return;
+      }
+
+      var notesAddBtn = e.target.closest(".notes-add-btn");
+      if (notesAddBtn) {
+        showNotesForm(notesAddBtn.getAttribute("data-day"));
         return;
       }
 
