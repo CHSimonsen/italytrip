@@ -276,17 +276,27 @@
     color:var(--terracotta-deep);
     line-height:1.1;
   }
-  .day-head-main{ flex:1 1 auto; min-width:0; }
+  .day-head-main{ flex:1 1 auto; min-width:0; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
   .day-head-main .city{
     font-family:var(--serif);
     font-size:1.15rem;
     font-weight:600;
   }
-  .day-head-main .teaser{
-    font-size:.85rem;
-    color:var(--ink-soft);
-    margin-top:2px;
+  .day-title-edit{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:22px; height:22px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--sea-deep);
+    cursor:pointer;
   }
+  .day-title-edit .icon{ width:12px; height:12px; }
+  .day-title-edit:hover{ background:color-mix(in srgb, var(--sea) 14%, transparent); }
+  .day-title-form{ margin-bottom:14px; }
   .today-pill{
     display:inline-block;
     margin-left:8px;
@@ -806,6 +816,6 @@
 </div>
 <div id="toast" class="toast" hidden></div>
 
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>

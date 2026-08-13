@@ -1,6 +1,5 @@
 {
   "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Et punkt har kun 'time' og 'text'. 'time' skal være 'TT:MM' eller 'TT:MM–TT:MM' (24-timers, to cifre) — punkter sorteres automatisk efter starttid, ikke efter rækkefølgen i filen. Felterne 'icon', 'tone' og 'highlight' vises ikke længere på siden — de bliver ignoreret på ældre punkter og kan udelades i nye.",
-
   "trip": {
     "departure": {
       "airport": "Bologna (BLQ)",
@@ -10,14 +9,32 @@
       "iso": "2026-08-20T16:15:00+02:00"
     }
   },
-
   "route": [
-    { "id": "amalfi", "name": "Amalfi", "date": "14/8", "query": "Amalfi, Italy" },
-    { "id": "roma", "name": "Roma", "date": "15.–16/8", "query": "Rome, Italy" },
-    { "id": "firenze", "name": "Firenze", "date": "17.–18/8", "query": "Florence, Italy" },
-    { "id": "bologna", "name": "Bologna", "date": "19.–20/8", "query": "Bologna, Italy" }
+    {
+      "id": "amalfi",
+      "name": "Amalfi",
+      "date": "14/8",
+      "query": "Amalfi, Italy"
+    },
+    {
+      "id": "roma",
+      "name": "Roma",
+      "date": "15.–16/8",
+      "query": "Rome, Italy"
+    },
+    {
+      "id": "firenze",
+      "name": "Firenze",
+      "date": "17.–18/8",
+      "query": "Florence, Italy"
+    },
+    {
+      "id": "bologna",
+      "name": "Bologna",
+      "date": "19.–20/8",
+      "query": "Bologna, Italy"
+    }
   ],
-
   "days": [
     {
       "id": "day-1",
@@ -25,14 +42,29 @@
       "dow": "Fre",
       "dayNum": "14",
       "city": "Amalfi → Rom",
-      "teaser": "Færgetur langs kysten, så videre til Rom",
       "mapLinks": [
-        { "label": "Amalfi", "query": "Amalfi, Italy" },
-        { "label": "Rom", "query": "Rome, Italy" }
+        {
+          "label": "Amalfi",
+          "query": "Amalfi, Italy"
+        },
+        {
+          "label": "Rom",
+          "query": "Rome, Italy"
+        }
       ],
       "activities": [
-        { "time": "10:30–11:10", "icon": "ferry", "tone": "sea", "text": "Færgetur til Amalfi by.", "highlight": "Amalfikysten" },
-        { "time": "13:30–17:00", "icon": "transit", "text": "Videre til Rom. Ankomst fredag aften." }
+        {
+          "time": "10:30–11:10",
+          "icon": "ferry",
+          "tone": "sea",
+          "text": "Færgetur til Amalfi by.",
+          "highlight": "Amalfikysten"
+        },
+        {
+          "time": "13:30–17:00",
+          "icon": "transit",
+          "text": "Videre til Rom. Ankomst fredag aften."
+        }
       ],
       "suggestion": {
         "text": "I har et par timer i Amalfi inden I kører videre — brug dem på den 5 minutters gang gennem tunnelen fra hovedpladsen til nabolandsbyen Atrani. Langt mindre turisttæt end Amalfi selv: ophængt vasketøj, fiskere der reparerer net, og lokale der sludrer fra altanerne.",
@@ -46,13 +78,25 @@
       "dow": "Lør",
       "dayNum": "15",
       "city": "Rom",
-      "teaser": "I Rom, hotel med pool",
       "mapLinks": [
-        { "label": "Rom", "query": "Rome, Italy" }
+        {
+          "label": "Rom",
+          "query": "Rome, Italy"
+        }
       ],
       "activities": [
-        { "time": "09:00–18:00", "icon": "landmark", "text": "Rom udforskes i eget tempo." },
-        { "time": "18:30–20:00", "icon": "pool", "tone": "sea", "text": "Afkøling ved hotellets pool.", "highlight": "Pool-dag" }
+        {
+          "time": "09:00–18:00",
+          "icon": "landmark",
+          "text": "Rom udforskes i eget tempo."
+        },
+        {
+          "time": "18:30–20:00",
+          "icon": "pool",
+          "tone": "sea",
+          "text": "Afkøling ved hotellets pool.",
+          "highlight": "Pool-dag"
+        }
       ],
       "suggestion": {
         "text": "Byt en time ud på egen-tempo-dagen med Testaccio — Roms mest autentiske madkvarter, uden for de klassiske ruter. Gå gennem Mercato di Testaccio, og kig forbi Cestius-pyramiden og den ikke-katolske kirkegård lige i nærheden.",
@@ -66,13 +110,23 @@
       "dow": "Søn",
       "dayNum": "16",
       "city": "Rom",
-      "teaser": "Rom, Rom, Rom",
       "mapLinks": [
-        { "label": "Rom", "query": "Rome, Italy" }
+        {
+          "label": "Rom",
+          "query": "Rome, Italy"
+        }
       ],
       "activities": [
-        { "time": "09:00–13:00", "icon": "landmark", "text": "Endnu en runde seværdigheder — for fuld udblæsning." },
-        { "time": "13:00–18:00", "icon": "landmark", "text": "Mere Rom, og en gelato undervejs." }
+        {
+          "time": "09:00–13:00",
+          "icon": "landmark",
+          "text": "Endnu en runde seværdigheder — for fuld udblæsning."
+        },
+        {
+          "time": "13:00–18:00",
+          "icon": "landmark",
+          "text": "Mere Rom, og en gelato undervejs."
+        }
       ],
       "suggestion": {
         "text": "For noget helt andet end de klassiske sights: Kapucinerkrypten under kirken Santa Maria della Concezione, hvor gangene er dekoreret med knogler fra afdøde munke. Uhyggeligt, mærkeligt og overstået på 20 minutter — perfekt som en kort afstikker mellem de store seværdigheder.",
@@ -86,14 +140,29 @@
       "dow": "Man",
       "dayNum": "17",
       "city": "Firenze",
-      "teaser": "Rejsedag, shopping og aftensmad",
       "mapLinks": [
-        { "label": "Firenze", "query": "Florence, Italy" }
+        {
+          "label": "Firenze",
+          "query": "Florence, Italy"
+        }
       ],
       "activities": [
-        { "time": "09:30–12:30", "icon": "transit", "text": "Rejse til Firenze." },
-        { "time": "13:30–16:30", "icon": "bag", "tone": "olive", "text": "Shopping i centrum." },
-        { "time": "19:30–21:30", "icon": "food", "text": "Middag i Firenze." }
+        {
+          "time": "09:30–12:30",
+          "icon": "transit",
+          "text": "Rejse til Firenze."
+        },
+        {
+          "time": "13:30–16:30",
+          "icon": "bag",
+          "tone": "olive",
+          "text": "Shopping i centrum."
+        },
+        {
+          "time": "19:30–21:30",
+          "icon": "food",
+          "text": "Middag i Firenze."
+        }
       ],
       "suggestion": {
         "text": "Efter shoppingen, før middagen: gå op til San Miniato al Monte, lige ovenfor det mere overfyldte Piazzale Michelangelo. Samme storslåede udsigt over Firenze, men roligere — munkene synger ofte aftensang ved solnedgang. Giardino delle Rose lige nedenfor har samme udsigt, gratis og næsten uden kø, hvis I vil undgå trapperne helt op.",
@@ -107,14 +176,30 @@
       "dow": "Tir",
       "dayNum": "18",
       "city": "Firenze",
-      "teaser": "Afslapning, mad og vingård",
       "mapLinks": [
-        { "label": "Firenze", "query": "Florence, Italy" }
+        {
+          "label": "Firenze",
+          "query": "Florence, Italy"
+        }
       ],
       "activities": [
-        { "time": "09:00–12:00", "icon": "sun", "text": "Afslapningsdag — ingen planer, ingen stress." },
-        { "time": "13:00–16:00", "icon": "wine", "tone": "olive", "text": "Besøg på en vingård i Toscana.", "highlight": "Vingårdsbesøg" },
-        { "time": "19:30–21:30", "icon": "food", "text": "God mad, ingen hastværk." }
+        {
+          "time": "09:00–12:00",
+          "icon": "sun",
+          "text": "Afslapningsdag — ingen planer, ingen stress."
+        },
+        {
+          "time": "13:00–16:00",
+          "icon": "wine",
+          "tone": "olive",
+          "text": "Besøg på en vingård i Toscana.",
+          "highlight": "Vingårdsbesøg"
+        },
+        {
+          "time": "19:30–21:30",
+          "icon": "food",
+          "text": "God mad, ingen hastværk."
+        }
       ],
       "suggestion": {
         "text": "Til den planløse formiddag: en kaffe på taget af Biblioteca delle Oblate, få skridt fra Duomoen. En af Firenzes bedst bevarede hemmeligheder — udsigt direkte mod kuplen, og næsten ingen turister ved det findes. Perfekt tempo før eftermiddagens vingårdsbesøg.",
@@ -128,15 +213,32 @@
       "dow": "Ons",
       "dayNum": "19",
       "city": "Firenze → Bologna",
-      "teaser": "Rejsedag, hotel og aftensmad i Bologna",
       "mapLinks": [
-        { "label": "Firenze", "query": "Florence, Italy" },
-        { "label": "Bologna", "query": "Bologna, Italy" }
+        {
+          "label": "Firenze",
+          "query": "Florence, Italy"
+        },
+        {
+          "label": "Bologna",
+          "query": "Bologna, Italy"
+        }
       ],
       "activities": [
-        { "time": "10:00–11:30", "icon": "transit", "text": "Rejse til Bologna." },
-        { "time": "12:00–13:30", "icon": "bed", "text": "Finde og tjekke ind på hotellet." },
-        { "time": "19:30–21:30", "icon": "food", "text": "Aftensmad i Bologna." }
+        {
+          "time": "10:00–11:30",
+          "icon": "transit",
+          "text": "Rejse til Bologna."
+        },
+        {
+          "time": "12:00–13:30",
+          "icon": "bed",
+          "text": "Finde og tjekke ind på hotellet."
+        },
+        {
+          "time": "19:30–21:30",
+          "icon": "food",
+          "text": "Aftensmad i Bologna."
+        }
       ],
       "suggestion": {
         "text": "Første eftermiddag i Bologna: gå en tur under portikerne til Piazza Maggiore, kig ind i Basilica di San Petronio (den ufærdige facade er en del af charmen), og kryds over til Piazza del Nettuno for at se Neptunfontænen. Overskud til det? Torre dell'Orologio tager kun 30-45 minutter at bestige og giver udsigt over det hele.",
@@ -150,14 +252,28 @@
       "dow": "Tor",
       "dayNum": "20",
       "city": "Bologna → hjem",
-      "teaser": "Frokost, chill og afgang kl. 16:15",
       "mapLinks": [
-        { "label": "Bologna", "query": "Bologna, Italy" },
-        { "label": "Lufthavn (BLQ)", "query": "Bologna Guglielmo Marconi Airport" }
+        {
+          "label": "Bologna",
+          "query": "Bologna, Italy"
+        },
+        {
+          "label": "Lufthavn (BLQ)",
+          "query": "Bologna Guglielmo Marconi Airport"
+        }
       ],
       "activities": [
-        { "time": "10:30–12:30", "icon": "food", "text": "Frokost og chill inden afgang." },
-        { "time": "13:45–16:15", "icon": "plane", "tone": "sea", "text": "Check-in kl. 13:45 · afgang fra lufthavnen kl. 16:15." }
+        {
+          "time": "10:30–12:30",
+          "icon": "food",
+          "text": "Frokost og chill inden afgang."
+        },
+        {
+          "time": "13:45–16:15",
+          "icon": "plane",
+          "tone": "sea",
+          "text": "Check-in kl. 13:45 · afgang fra lufthavnen kl. 16:15."
+        }
       ],
       "suggestion": {
         "text": "Til den sidste frokost: tag ind i Quadrilatero-kvarteret lige ved centrum — Bolognas gamle markedskvarter med charcuteri, frisk pasta og bagværk. Bologna kaldes Italiens madhovedstad af en grund; bedre afslutning end en tilfældig café, når tiden alligevel er knap før check-in.",

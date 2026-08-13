@@ -15,6 +15,7 @@ Siden har en **"🔒 Rediger planen"**-knap under "Dag for dag". Første gang du
 - Hver dag får en **"+ Tilføj punkt"**-knap nederst, hvor du sætter starttid (og evt. sluttid) med en rigtig tidsvælger, plus en beskrivelse.
 - Hvert punkt får en lille ✏️-knap til at rette det (samme felter, forudfyldt) og en 🗑-knap til at slette det.
 - Punkter sorteres automatisk efter starttid, hver gang du gemmer — så du kan tilføje eller rette et punkt i vilkårlig rækkefølge, og det lander det rigtige sted i dagens tidslinje af sig selv.
+- Dagens titel (fx "Amalfi → Rom") har sin egen lille ✏️-knap i dagens hoved — tryk for at ændre den.
 
 Ændringer gemmes med det samme direkte til `data.json` i repoet — ingen commit-skærm, ingen GitHub-app nødvendig. Adgangskoden huskes i browseren på den enhed, så du kun skal indtaste den én gang pr. telefon/browser.
 

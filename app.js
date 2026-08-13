@@ -161,6 +161,12 @@
       })
       .join("");
 
+    var titleEditBtn = isEditMode()
+      ? '<button type="button" class="day-title-edit" data-day="' +
+        esc(day.id) +
+        '" aria-label="Rediger dagens titel"><svg class="icon"><use href="#icon-pencil"></use></svg></button>'
+      : "";
+
     var el = document.createElement("details");
     el.className = "day";
     el.id = day.id;
@@ -176,9 +182,7 @@
       '<span class="city">' +
       esc(day.city) +
       "</span>" +
-      '<span class="teaser">' +
-      esc(day.teaser) +
-      "</span>" +
+      titleEditBtn +
       "</span>" +
       '<svg class="chevron"><use href="#icon-chevron"></use></svg>' +
       "</summary>" +
@@ -718,6 +722,52 @@
     });
   }
 
+  function showTitleEditForm(dayId) {
+    var el = document.getElementById(dayId);
+    if (!el) return;
+    var body = el.querySelector(".day-body");
+    if (!body || body.querySelector(".day-title-form")) return;
+
+    var day = (APP_DATA.days || []).filter(function (d) {
+      return d.id === dayId;
+    })[0];
+    if (!day) return;
+
+    el.open = true;
+
+    var form = document.createElement("div");
+    form.className = "add-step-form day-title-form";
+    form.innerHTML =
+      '<div class="field"><label>Titel</label><input type="text" class="f-title" value="' +
+      esc(day.city) +
+      '"></div>' +
+      '<div class="add-step-form-actions">' +
+      '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
+      '<button type="button" class="btn-primary f-save">Gem</button>' +
+      "</div>";
+    body.insertBefore(form, body.firstChild);
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    form.querySelector(".f-cancel").addEventListener("click", function () {
+      form.remove();
+    });
+    form.querySelector(".f-save").addEventListener("click", function () {
+      var title = form.querySelector(".f-title").value.trim();
+      if (!title) {
+        showToast("Titel kan ikke være tom.");
+        return;
+      }
+      form.remove();
+      withEdit(function (data) {
+        var d = data.days.filter(function (dd) {
+          return dd.id === dayId;
+        })[0];
+        if (d) d.city = title;
+        return data;
+      }, "Ret titel for " + dayId + " (via siden)");
+    });
+  }
+
   function cssEscape(s) {
     return String(s).replace(/["\\]/g, "\\$&");
   }
@@ -752,6 +802,13 @@
     if (!timeline) return;
 
     timeline.addEventListener("click", function (e) {
+      var titleEditBtn = e.target.closest(".day-title-edit");
+      if (titleEditBtn) {
+        e.preventDefault(); // inside <summary> -- don't let the native toggle fire too
+        showTitleEditForm(titleEditBtn.getAttribute("data-day"));
+        return;
+      }
+
       var editBtn = e.target.closest(".activity-edit");
       if (editBtn) {
         showEditForm(editBtn.getAttribute("data-day"), parseInt(editBtn.getAttribute("data-index"), 10));
