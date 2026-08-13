@@ -25,7 +25,7 @@
     dbgPanel.appendChild(line);
     dbgPanel.scrollTop = dbgPanel.scrollHeight;
   }
-  dbg("app.js indlæst (build diag6)");
+  dbg("app.js indlæst (build diag9)");
   window.addEventListener("error", function (e) {
     dbg("SCRIPT-FEJL: " + (e.message || "ukendt") + (e.filename ? " @ " + e.filename + ":" + e.lineno : ""));
   });
