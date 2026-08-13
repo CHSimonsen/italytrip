@@ -12,8 +12,9 @@ Der er to måder — brug den, der passer bedst i situationen.
 
 Siden har en **"🔒 Rediger planen"**-knap under "Dag for dag". Første gang du trykker på den beder den om en adgangskode — se *"Sådan slår du redigering til"* nedenfor for hvordan I får fat i den. Når den er låst op:
 
-- Hver dag får en **"+ Tilføj punkt"**-knap nederst, hvor du udfylder tidspunkt og beskrivelse.
+- Hver dag får en **"+ Tilføj punkt"**-knap nederst, hvor du sætter starttid (og evt. sluttid) med en rigtig tidsvælger, plus en beskrivelse.
 - Hvert punkt får en lille ✏️-knap til at rette det (samme felter, forudfyldt) og en 🗑-knap til at slette det.
+- Punkter sorteres automatisk efter starttid, hver gang du gemmer — så du kan tilføje eller rette et punkt i vilkårlig rækkefølge, og det lander det rigtige sted i dagens tidslinje af sig selv.
 
 Ændringer gemmes med det samme direkte til `data.json` i repoet — ingen commit-skærm, ingen GitHub-app nødvendig. Adgangskoden huskes i browseren på den enhed, så du kun skal indtaste den én gang pr. telefon/browser.
 
@@ -37,11 +38,17 @@ Alt indhold i planen ligger i **[`data.json`](./data.json)** — ikke i selve HT
 { "time": "12:00–13:00", "text": "Frokost nær Pantheon." }
 ```
 
+Kun starttidspunkt (uden sluttid) er også gyldigt:
+
+```json
+{ "time": "12:00", "text": "Check-in på hotellet." }
+```
+
 **Felter:**
 
 | Felt | Påkrævet | Beskrivelse |
 |---|---|---|
-| `time` | Ja | Klokkeslæt-tekst, fx `"09:00–12:00"` eller `"Hele dagen"` |
+| `time` | Ja | `"TT:MM"` eller `"TT:MM–TT:MM"` (24-timers, altid to cifre). Bruges også til automatisk sortering — punkter vises altid i starttids-rækkefølge, uanset rækkefølgen i filen. **Ikke** frit tekstfelt længere (fx `"Hele dagen"` virker ikke) — redigér via "Rediger planen" på siden for at få en rigtig tidsvælger, eller skriv tiden præcist i dette format. |
 | `text` | Ja | Beskrivelsen der vises |
 | `icon`, `tone`, `highlight` | Nej (ikke i brug) | Ældre punkter kan have disse felter fra før ikoner/farvetone/highlight-badges blev fjernet fra siden — de bliver simpelthen ignoreret nu. Kan udelades i nye punkter. |
 

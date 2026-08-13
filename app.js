@@ -551,11 +551,56 @@
     btn.classList.toggle("is-unlocked", unlocked);
   }
 
+  /* Time is a real <input type="time"> (start required, end optional),
+     never free text — this both prevents inconsistent formats and
+     gives every activity a reliable sort key, so days auto-sort by
+     start time on every save instead of needing manual positioning. */
+  function parseStartMinutes(timeStr) {
+    var m = /^(\d{1,2}):(\d{2})/.exec(String(timeStr || "").trim());
+    if (!m) return null;
+    return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+  }
+
+  function pad2Time(t) {
+    var parts = t.split(":");
+    return pad(parseInt(parts[0], 10)) + ":" + pad(parseInt(parts[1], 10));
+  }
+
+  function parseTimeRange(timeStr) {
+    var s = String(timeStr || "").trim();
+    var m = /^(\d{1,2}:\d{2})\s*[–-]\s*(\d{1,2}:\d{2})$/.exec(s);
+    if (m) return { start: pad2Time(m[1]), end: pad2Time(m[2]) };
+    var m2 = /^(\d{1,2}:\d{2})$/.exec(s);
+    if (m2) return { start: pad2Time(m2[1]), end: "" };
+    return { start: "", end: "" };
+  }
+
+  function formatTimeRange(start, end) {
+    return end ? start + "–" + end : start;
+  }
+
+  function sortDayActivities(day) {
+    if (!day || !day.activities) return;
+    day.activities.sort(function (a, b) {
+      var ta = parseStartMinutes(a.time);
+      var tb = parseStartMinutes(b.time);
+      if (ta == null) ta = Infinity;
+      if (tb == null) tb = Infinity;
+      return ta - tb;
+    });
+  }
+
   function stepFieldsHtml(prefix, vals) {
+    var range = parseTimeRange(vals.time);
     return (
-      '<div class="field"><label>Tidspunkt</label><input type="text" class="f-time" placeholder="f.eks. 12:00–13:00" value="' +
-      esc(vals.time) +
+      '<div class="field-row">' +
+      '<div class="field"><label>Fra</label><input type="time" class="f-time-start" value="' +
+      esc(range.start) +
       '"></div>' +
+      '<div class="field"><label>Til (valgfri)</label><input type="time" class="f-time-end" value="' +
+      esc(range.end) +
+      '"></div>' +
+      "</div>" +
       '<div class="field"><label>Beskrivelse</label><input type="text" class="f-text" placeholder="Hvad sker der?" value="' +
       esc(vals.text) +
       '"></div>' +
@@ -569,13 +614,14 @@
   }
 
   function readStepForm(form) {
-    var time = form.querySelector(".f-time").value.trim();
+    var start = form.querySelector(".f-time-start").value;
+    var end = form.querySelector(".f-time-end").value;
     var text = form.querySelector(".f-text").value.trim();
-    if (!time || !text) {
-      showToast("Udfyld mindst tidspunkt og beskrivelse.");
+    if (!start || !text) {
+      showToast("Angiv mindst starttidspunkt og beskrivelse.");
       return null;
     }
-    return { time: time, text: text };
+    return { time: formatTimeRange(start, end), text: text };
   }
 
   function showAddForm(dayId) {
@@ -586,7 +632,7 @@
     form.className = "add-step-form";
     form.innerHTML = stepFieldsHtml("Tilføj", { time: "", text: "" });
     actions.insertBefore(form, actions.firstChild);
-    form.querySelector(".f-time").focus();
+    form.querySelector(".f-time-start").focus();
 
     form.querySelector(".f-cancel").addEventListener("click", function () {
       form.remove();
@@ -602,6 +648,7 @@
         if (day) {
           day.activities = day.activities || [];
           day.activities.push(activity);
+          sortDayActivities(day);
         }
         return data;
       }, "Tilføj punkt til " + dayId + " (via siden)");
@@ -627,7 +674,7 @@
     form.className = "add-step-form";
     form.innerHTML = stepFieldsHtml("Gem", act);
     activityEl.insertAdjacentElement("afterend", form);
-    form.querySelector(".f-time").focus();
+    form.querySelector(".f-time-start").focus();
 
     form.querySelector(".f-cancel").addEventListener("click", function () {
       form.remove();
@@ -643,6 +690,7 @@
         })[0];
         if (d && d.activities && d.activities[index]) {
           d.activities[index] = edited;
+          sortDayActivities(d);
         }
         return data;
       }, "Ret punkt i " + dayId + " (via siden)");

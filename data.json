@@ -1,5 +1,5 @@
 {
-  "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Et punkt har kun 'time' og 'text'. Felterne 'icon', 'tone' og 'highlight' vises ikke længere på siden — de bliver ignoreret på ældre punkter og kan udelades i nye.",
+  "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Et punkt har kun 'time' og 'text'. 'time' skal være 'TT:MM' eller 'TT:MM–TT:MM' (24-timers, to cifre) — punkter sorteres automatisk efter starttid, ikke efter rækkefølgen i filen. Felterne 'icon', 'tone' og 'highlight' vises ikke længere på siden — de bliver ignoreret på ældre punkter og kan udelades i nye.",
 
   "trip": {
     "departure": {
