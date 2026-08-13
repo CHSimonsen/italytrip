@@ -12,8 +12,8 @@ Der er to måder — brug den, der passer bedst i situationen.
 
 Siden har en **"🔒 Rediger planen"**-knap under "Dag for dag". Første gang du trykker på den beder den om en adgangskode — se *"Sådan slår du redigering til"* nedenfor for hvordan I får fat i den. Når den er låst op:
 
-- Hver dag får en **"+ Tilføj punkt"**-knap nederst, hvor du udfylder tidspunkt, ikon, beskrivelse og eventuelt farvetone/highlight.
-- Hvert punkt får en lille 🗑-knap til at slette det.
+- Hver dag får en **"+ Tilføj punkt"**-knap nederst, hvor du udfylder tidspunkt, beskrivelse og eventuelt farvetone/highlight.
+- Hvert punkt får en lille ✏️-knap til at rette det (samme felter, forudfyldt) og en 🗑-knap til at slette det.
 
 Ændringer gemmes med det samme direkte til `data.json` i repoet — ingen commit-skærm, ingen GitHub-app nødvendig. Adgangskoden huskes i browseren på den enhed, så du kun skal indtaste den én gang pr. telefon/browser.
 
@@ -34,13 +34,13 @@ Alt indhold i planen ligger i **[`data.json`](./data.json)** — ikke i selve HT
 ### Et punkt (aktivitet) ser sådan ud
 
 ```json
-{ "time": "12:00–13:00", "icon": "food", "text": "Frokost nær Pantheon." }
+{ "time": "12:00–13:00", "text": "Frokost nær Pantheon." }
 ```
 
 Med highlight-badge og farvetone (begge valgfrie):
 
 ```json
-{ "time": "13:00–16:00", "icon": "wine", "tone": "olive", "text": "Besøg på en vingård.", "highlight": "Vingårdsbesøg" }
+{ "time": "13:00–16:00", "tone": "olive", "text": "Besøg på en vingård.", "highlight": "Vingårdsbesøg" }
 ```
 
 **Felter:**
@@ -48,10 +48,10 @@ Med highlight-badge og farvetone (begge valgfrie):
 | Felt | Påkrævet | Beskrivelse |
 |---|---|---|
 | `time` | Ja | Klokkeslæt-tekst, fx `"09:00–12:00"` eller `"Hele dagen"` |
-| `icon` | Ja | Et af: `ferry`, `transit`, `landmark`, `pool`, `wine`, `bag`, `bed`, `food`, `plane`, `sun` |
 | `text` | Ja | Beskrivelsen der vises |
-| `tone` | Nej | `sea` (blå) eller `olive` (grøn) — udelad for standard terracotta |
+| `tone` | Nej | `sea` (blå) eller `olive` (grøn) — farver klokkeslættet, udelad for standard |
 | `highlight` | Nej | Tekst til et gyldent highlight-badge, fx `"Pool-dag"` |
+| `icon` | Nej (ikke i brug) | Ældre punkter kan have et `icon`-felt fra før ikonerne blev fjernet fra siden — det bliver simpelthen ignoreret nu. Kan udelades i nye punkter. |
 
 ### Tilføj en helt ny dag
 

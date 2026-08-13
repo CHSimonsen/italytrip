@@ -11,20 +11,6 @@
     console.error("[rejseplan] Uventet fejl (promise):", e.reason);
   });
 
-  var ICONS = {
-    ferry: "icon-ferry",
-    transit: "icon-transit",
-    landmark: "icon-landmark",
-    pool: "icon-pool",
-    wine: "icon-wine",
-    bag: "icon-bag",
-    bed: "icon-bed",
-    food: "icon-food",
-    plane: "icon-plane",
-    sun: "icon-sun"
-  };
-  var ICON_KEYS = Object.keys(ICONS);
-
   var REPO_OWNER = "CHSimonsen";
   var REPO_NAME = "italytrip";
   var REPO_BRANCH = "main";
@@ -43,11 +29,6 @@
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
-  }
-
-  function iconUse(name) {
-    var id = ICONS[name] || "icon-sun";
-    return '<svg class="icon"><use href="#' + id + '"></use></svg>';
   }
 
   fetch("data.json", { cache: "no-store" })
@@ -103,25 +84,29 @@
   /* ---------- Timeline ---------- */
   function renderActivity(act, dayId, index) {
     var toneClass = act.tone ? " tone-" + act.tone : "";
-    var badge = act.highlight
-      ? '<span class="highlight-badge">' + iconUse("sun") + esc(act.highlight) + "</span>"
-      : "";
-    var deleteBtn = isEditMode()
-      ? '<button type="button" class="activity-delete" data-day="' +
+    var badge = act.highlight ? '<span class="highlight-badge">' + esc(act.highlight) + "</span>" : "";
+    var actionsHtml = "";
+    if (isEditMode()) {
+      actionsHtml =
+        '<span class="activity-actions">' +
+        '<button type="button" class="activity-edit" data-day="' +
         esc(dayId) +
         '" data-index="' +
         index +
-        '" aria-label="Slet dette punkt">' +
-        '<svg class="icon"><use href="#icon-trash"></use></svg>' +
-        "</button>"
-      : "";
+        '" aria-label="Rediger dette punkt"><svg class="icon"><use href="#icon-pencil"></use></svg></button>' +
+        '<button type="button" class="activity-delete" data-day="' +
+        esc(dayId) +
+        '" data-index="' +
+        index +
+        '" aria-label="Slet dette punkt"><svg class="icon"><use href="#icon-trash"></use></svg></button>' +
+        "</span>";
+    }
     return (
       '<div class="activity' +
       toneClass +
+      '" data-index="' +
+      index +
       '">' +
-      '<span class="icon-badge">' +
-      iconUse(act.icon) +
-      "</span>" +
       '<span class="activity-body">' +
       '<span class="activity-time">' +
       esc(act.time) +
@@ -131,7 +116,7 @@
       "</p>" +
       badge +
       "</span>" +
-      deleteBtn +
+      actionsHtml +
       "</div>"
     );
   }
@@ -142,12 +127,6 @@
   }
 
   function renderDay(day, isFirst) {
-    var previewIcons = [];
-    (day.activities || []).forEach(function (a) {
-      if (previewIcons.indexOf(a.icon) === -1) previewIcons.push(a.icon);
-    });
-    var previewHtml = previewIcons.map(iconUse).join("");
-
     var mapLinksHtml = (day.mapLinks || [])
       .map(function (l) {
         var url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(l.query);
@@ -185,9 +164,6 @@
       '<span class="teaser">' +
       esc(day.teaser) +
       "</span>" +
-      "</span>" +
-      '<span class="day-preview-icons">' +
-      previewHtml +
       "</span>" +
       '<svg class="chevron"><use href="#icon-chevron"></use></svg>' +
       "</summary>" +
@@ -580,26 +556,59 @@
     btn.classList.toggle("is-unlocked", unlocked);
   }
 
+  function stepFieldsHtml(prefix, vals) {
+    return (
+      '<div class="field"><label>Tidspunkt</label><input type="text" class="f-time" placeholder="f.eks. 12:00–13:00" value="' +
+      esc(vals.time) +
+      '"></div>' +
+      '<div class="field"><label>Beskrivelse</label><input type="text" class="f-text" placeholder="Hvad sker der?" value="' +
+      esc(vals.text) +
+      '"></div>' +
+      '<div class="field"><label>Farvetone (valgfri)</label><select class="f-tone">' +
+      '<option value=""' +
+      (!vals.tone ? " selected" : "") +
+      ">Standard</option>" +
+      '<option value="sea"' +
+      (vals.tone === "sea" ? " selected" : "") +
+      ">Hav (blå)</option>" +
+      '<option value="olive"' +
+      (vals.tone === "olive" ? " selected" : "") +
+      ">Oliven (grøn)</option>" +
+      "</select></div>" +
+      '<div class="field"><label>Highlight-badge (valgfri)</label><input type="text" class="f-highlight" placeholder="f.eks. Pool-dag" value="' +
+      esc(vals.highlight || "") +
+      '"></div>' +
+      '<div class="add-step-form-actions">' +
+      '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
+      '<button type="button" class="btn-primary f-save">' +
+      esc(prefix) +
+      "</button>" +
+      "</div>"
+    );
+  }
+
+  function readStepForm(form) {
+    var time = form.querySelector(".f-time").value.trim();
+    var text = form.querySelector(".f-text").value.trim();
+    var tone = form.querySelector(".f-tone").value;
+    var highlight = form.querySelector(".f-highlight").value.trim();
+    if (!time || !text) {
+      showToast("Udfyld mindst tidspunkt og beskrivelse.");
+      return null;
+    }
+    var activity = { time: time, text: text };
+    if (tone) activity.tone = tone;
+    if (highlight) activity.highlight = highlight;
+    return activity;
+  }
+
   function showAddForm(dayId) {
     var actions = document.querySelector('.day-body-actions[data-day="' + cssEscape(dayId) + '"]');
     if (!actions || actions.querySelector(".add-step-form")) return;
 
     var form = document.createElement("div");
     form.className = "add-step-form";
-    form.innerHTML =
-      '<div class="field"><label>Tidspunkt</label><input type="text" class="f-time" placeholder="f.eks. 12:00–13:00"></div>' +
-      '<div class="field"><label>Ikon</label><select class="f-icon">' +
-      ICON_KEYS.map(function (k) {
-        return '<option value="' + k + '">' + k + "</option>";
-      }).join("") +
-      "</select></div>" +
-      '<div class="field"><label>Beskrivelse</label><input type="text" class="f-text" placeholder="Hvad sker der?"></div>' +
-      '<div class="field"><label>Farvetone (valgfri)</label><select class="f-tone"><option value="">Standard</option><option value="sea">Hav (blå)</option><option value="olive">Oliven (grøn)</option></select></div>' +
-      '<div class="field"><label>Highlight-badge (valgfri)</label><input type="text" class="f-highlight" placeholder="f.eks. Pool-dag"></div>' +
-      '<div class="add-step-form-actions">' +
-      '<button type="button" class="btn-secondary f-cancel">Annuller</button>' +
-      '<button type="button" class="btn-primary f-save">Tilføj</button>' +
-      "</div>";
+    form.innerHTML = stepFieldsHtml("Tilføj", { time: "", text: "", tone: "", highlight: "" });
     actions.insertBefore(form, actions.firstChild);
     form.querySelector(".f-time").focus();
 
@@ -607,18 +616,8 @@
       form.remove();
     });
     form.querySelector(".f-save").addEventListener("click", function () {
-      var time = form.querySelector(".f-time").value.trim();
-      var icon = form.querySelector(".f-icon").value;
-      var text = form.querySelector(".f-text").value.trim();
-      var tone = form.querySelector(".f-tone").value;
-      var highlight = form.querySelector(".f-highlight").value.trim();
-      if (!time || !text) {
-        showToast("Udfyld mindst tidspunkt og beskrivelse.");
-        return;
-      }
-      var activity = { time: time, icon: icon, text: text };
-      if (tone) activity.tone = tone;
-      if (highlight) activity.highlight = highlight;
+      var activity = readStepForm(form);
+      if (!activity) return;
       form.remove();
       withEdit(function (data) {
         var day = data.days.filter(function (d) {
@@ -630,6 +629,47 @@
         }
         return data;
       }, "Tilføj punkt til " + dayId + " (via siden)");
+    });
+  }
+
+  function showEditForm(dayId, index) {
+    var list = document.querySelector('.activity-list[data-day="' + cssEscape(dayId) + '"]');
+    if (!list) return;
+    var activityEl = list.querySelector('.activity[data-index="' + index + '"]');
+    if (!activityEl) return;
+    if (activityEl.nextElementSibling && activityEl.nextElementSibling.classList.contains("add-step-form")) return;
+
+    var day = (APP_DATA.days || []).filter(function (d) {
+      return d.id === dayId;
+    })[0];
+    var act = day && day.activities && day.activities[index];
+    if (!act) return;
+
+    activityEl.style.display = "none";
+
+    var form = document.createElement("div");
+    form.className = "add-step-form";
+    form.innerHTML = stepFieldsHtml("Gem", act);
+    activityEl.insertAdjacentElement("afterend", form);
+    form.querySelector(".f-time").focus();
+
+    form.querySelector(".f-cancel").addEventListener("click", function () {
+      form.remove();
+      activityEl.style.display = "";
+    });
+    form.querySelector(".f-save").addEventListener("click", function () {
+      var edited = readStepForm(form);
+      if (!edited) return;
+      form.remove();
+      withEdit(function (data) {
+        var d = data.days.filter(function (dd) {
+          return dd.id === dayId;
+        })[0];
+        if (d && d.activities && d.activities[index]) {
+          d.activities[index] = edited;
+        }
+        return data;
+      }, "Ret punkt i " + dayId + " (via siden)");
     });
   }
 
@@ -667,6 +707,12 @@
     if (!timeline) return;
 
     timeline.addEventListener("click", function (e) {
+      var editBtn = e.target.closest(".activity-edit");
+      if (editBtn) {
+        showEditForm(editBtn.getAttribute("data-day"), parseInt(editBtn.getAttribute("data-index"), 10));
+        return;
+      }
+
       var delBtn = e.target.closest(".activity-delete");
       if (delBtn) {
         var dayId = delBtn.getAttribute("data-day");

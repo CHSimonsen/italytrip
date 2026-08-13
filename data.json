@@ -1,5 +1,5 @@
 {
-  "_readme": "Redigér denne fil for at ændre planen. Se README.md i repoet for en guide til at tilføje/fjerne et punkt på en dag. Gyldige ikon-navne: ferry, transit, landmark, pool, wine, bag, bed, food, plane, sun. Gyldige tone-navne (valgfrit, styrer farven på ikonet): sea, olive (udelad for standard terracotta).",
+  "_readme": "Redigér denne fil for at ændre planen, eller brug 'Rediger planen'-knappen på siden. Se README.md i repoet for en guide. Ikoner vises ikke længere på siden — 'icon'-feltet på ældre punkter bliver ignoreret og kan udelades i nye. Gyldige tone-navne (valgfrit, farver klokkeslættet): sea, olive (udelad for standard).",
 
   "trip": {
     "departure": {
