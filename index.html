@@ -534,12 +534,18 @@
   .modal-backdrop{
     position:fixed; inset:0;
     background:rgba(0,0,0,0.45);
-    display:flex; align-items:flex-start; justify-content:center;
+    align-items:flex-start; justify-content:center;
     padding:20px;
     padding-top:10vh;
     overflow-y:auto;
     z-index:100;
   }
+  /* display must only apply when NOT hidden — setting display:flex
+     unconditionally on .modal-backdrop overrides the browser's
+     built-in [hidden]{display:none} rule (author CSS beats the UA
+     stylesheet regardless of specificity), so the modal never
+     actually hides once opened. */
+  .modal-backdrop:not([hidden]){ display:flex; }
   .modal{
     width:100%; max-width:360px;
     max-height:80vh;
@@ -788,6 +794,6 @@
 </div>
 <div id="toast" class="toast" hidden></div>
 
-<script src="app.js?v=diag7"></script>
+<script src="app.js?v=diag8"></script>
 </body>
 </html>
