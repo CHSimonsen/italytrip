@@ -1,46 +1,15 @@
 (function () {
   "use strict";
 
-  /* Temporary debug net: logs to a visible on-page panel instead of
-     alert() — Safari silently suppresses repeated alert() dialogs on
-     a page with no way to tell the script that happened, which made
-     alert()-based debugging itself go silent. A DOM panel can't be
-     suppressed. Remove this whole block once the unlock issue is
-     confirmed fixed. */
-  var dbgPanel = null;
   function dbg(msg) {
-    if (!dbgPanel) {
-      dbgPanel = document.createElement("div");
-      dbgPanel.id = "debug-panel";
-      dbgPanel.style.cssText =
-        "position:fixed;bottom:0;left:0;right:0;max-height:45vh;overflow-y:auto;" +
-        "background:#000;color:#3f3;font:11px/1.4 monospace;padding:8px;z-index:99999;" +
-        "white-space:pre-wrap;word-break:break-word;border-top:2px solid #3f3;";
-      (document.body || document.documentElement).appendChild(dbgPanel);
-    }
-    var line = document.createElement("div");
-    var t = new Date();
-    var stamp = String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0") + ":" + String(t.getSeconds()).padStart(2, "0");
-    line.textContent = stamp + " " + msg;
-    dbgPanel.appendChild(line);
-    dbgPanel.scrollTop = dbgPanel.scrollHeight;
+    console.log("[rejseplan] " + msg);
   }
-  dbg("app.js indlæst (build diag9)");
   window.addEventListener("error", function (e) {
-    dbg("SCRIPT-FEJL: " + (e.message || "ukendt") + (e.filename ? " @ " + e.filename + ":" + e.lineno : ""));
+    console.error("[rejseplan] Script-fejl:", e.message, e.filename, e.lineno);
   });
   window.addEventListener("unhandledrejection", function (e) {
-    var reason = e.reason;
-    dbg("UVENTET FEJL (promise): " + (reason && reason.message ? reason.message : String(reason)));
+    console.error("[rejseplan] Uventet fejl (promise):", e.reason);
   });
-  document.addEventListener(
-    "click",
-    function (e) {
-      var el = e.target.closest("button, a, input");
-      if (el) dbg("Klik på: " + el.tagName + (el.id ? "#" + el.id : "") + (el.className ? "." + String(el.className).replace(/\s+/g, ".") : ""));
-    },
-    true
-  );
 
   var ICONS = {
     ferry: "icon-ferry",
