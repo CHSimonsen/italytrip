@@ -494,73 +494,113 @@
       });
   }
 
-  /* ---------- Auth modal ---------- */
+  /* ---------- Auth modal ----------
+     Uses ONE delegated listener registered at module load (below),
+     not per-open listeners on the buttons — a direct listener attached
+     to #auth-submit each time the modal opened was mysteriously not
+     firing on at least one real device even though the click clearly
+     reached the button (confirmed via the delegated debug logger), so
+     this reuses the delegation pattern that's proven to work instead
+     of chasing that further. */
+  var authCallback = null;
+
   function openAuthModal(onDone) {
     var backdrop = document.getElementById("auth-modal");
     var input = document.getElementById("auth-input");
     var error = document.getElementById("auth-error");
-    var submitBtn = document.getElementById("auth-submit");
-    var cancelBtn = document.getElementById("auth-cancel");
-    if (!backdrop || !input || !submitBtn || !cancelBtn) return;
-
+    if (!backdrop || !input || !error) return;
+    authCallback = onDone;
     error.hidden = true;
     input.value = "";
     backdrop.hidden = false;
     input.focus();
-
-    function cleanup() {
-      backdrop.hidden = true;
-      submitBtn.removeEventListener("click", onSubmit);
-      cancelBtn.removeEventListener("click", onCancel);
-      input.removeEventListener("keydown", onKeydown);
-    }
-    function onCancel() {
-      cleanup();
-      onDone(false);
-    }
-    function onSubmit() {
-      try {
-        var token = input.value.trim();
-        dbg("onSubmit kørt. Token-længde: " + token.length);
-        if (!token) return;
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Tjekker …";
-        error.hidden = true;
-        githubGetFile(token)
-          .then(function () {
-            dbg("Login OK.");
-            setStoredToken(token);
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Lås op";
-            cleanup();
-            onDone(true);
-          })
-          .catch(function (err) {
-            console.error("Kunne ikke låse op:", err);
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Lås op";
-            var msg =
-              err && err.status === 404
-                ? "Koden virker, men kan ikke finde data.json — tjek at token har adgang til italytrip."
-                : err && (err.status === 401 || err.status === 403)
-                ? "Forkert adgangskode."
-                : (err && err.message) || "Ukendt fejl — prøv igen.";
-            error.textContent = msg;
-            error.hidden = false;
-            dbg("FEJL ved forespørgsel: " + msg + (err && err.status ? " (status " + err.status + ")" : "") + (err && err.network ? " [netværk/CORS]" : ""));
-          });
-      } catch (syncErr) {
-        dbg("UVENTET SCRIPT-FEJL i onSubmit: " + (syncErr && syncErr.message ? syncErr.message : syncErr));
-      }
-    }
-    function onKeydown(e) {
-      if (e.key === "Enter") onSubmit();
-      if (e.key === "Escape") onCancel();
-    }
-    submitBtn.addEventListener("click", onSubmit);
-    cancelBtn.addEventListener("click", onCancel);
-    input.addEventListener("keydown", onKeydown);
   }
+
+  function closeAuthModal() {
+    var backdrop = document.getElementById("auth-modal");
+    if (backdrop) backdrop.hidden = true;
+  }
+
+  function handleAuthCancel() {
+    closeAuthModal();
+    var cb = authCallback;
+    authCallback = null;
+    if (cb) cb(false);
+  }
+
+  function handleAuthSubmit() {
+    var input = document.getElementById("auth-input");
+    var error = document.getElementById("auth-error");
+    var submitBtn = document.getElementById("auth-submit");
+    if (!input || !error || !submitBtn) return;
+    try {
+      var token = input.value.trim();
+      dbg("handleAuthSubmit kørt. Token-længde: " + token.length);
+      if (!token) return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Tjekker …";
+      error.hidden = true;
+      githubGetFile(token)
+        .then(function () {
+          dbg("Login OK.");
+          setStoredToken(token);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Lås op";
+          closeAuthModal();
+          var cb = authCallback;
+          authCallback = null;
+          if (cb) cb(true);
+        })
+        .catch(function (err) {
+          console.error("Kunne ikke låse op:", err);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Lås op";
+          var msg =
+            err && err.status === 404
+              ? "Koden virker, men kan ikke finde data.json — tjek at token har adgang til italytrip."
+              : err && (err.status === 401 || err.status === 403)
+              ? "Forkert adgangskode."
+              : (err && err.message) || "Ukendt fejl — prøv igen.";
+          error.textContent = msg;
+          error.hidden = false;
+          dbg(
+            "FEJL ved forespørgsel: " +
+              msg +
+              (err && err.status ? " (status " + err.status + ")" : "") +
+              (err && err.network ? " [netværk/CORS]" : "")
+          );
+        });
+    } catch (syncErr) {
+      dbg("UVENTET SCRIPT-FEJL i handleAuthSubmit: " + (syncErr && syncErr.message ? syncErr.message : syncErr));
+    }
+  }
+
+  document.addEventListener(
+    "click",
+    function (e) {
+      if (e.target.closest("#auth-submit")) {
+        handleAuthSubmit();
+        return;
+      }
+      if (e.target.closest("#auth-cancel")) {
+        handleAuthCancel();
+        return;
+      }
+    },
+    true
+  );
+
+  document.addEventListener("keydown", function (e) {
+    var backdrop = document.getElementById("auth-modal");
+    if (!backdrop || backdrop.hidden) return;
+    if (e.target && e.target.id === "auth-input") {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleAuthSubmit();
+      }
+      if (e.key === "Escape") handleAuthCancel();
+    }
+  });
 
   function updateEditToggle() {
     var btn = document.getElementById("edit-toggle");
